@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "siyfTCbqjmfw6SY0C4ZfqkPYGoK/a4nXAYre4o44jnw=",
+  "Source": "BDInvoiceMatchingSystem.WebAPI",
+  "BasePath": "_content/BDInvoiceMatchingSystem.WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

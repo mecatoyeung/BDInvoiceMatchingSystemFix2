@@ -1,0 +1,6 @@
+@BDInvoiceMatchingSystem.WebAPI_HostAddress = http://localhost:5238
+
+GET {{BDInvoiceMatchingSystem.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
