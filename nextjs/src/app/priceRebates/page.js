@@ -1,46 +1,48 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
-import * as signalR from "@microsoft/signalr"
+import * as signalR from "@microsoft/signalr";
 
-import fetchWrapper from "@/app/helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@/app/helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
-import ColumnsToolPanel from "@/app/components/agGrid/columnsToolPanel"
+import { AgGridReact } from "ag-grid-react";
+import ColumnsToolPanel from "@/app/components/agGrid/columnsToolPanel";
 
-import Button from "@/app/helpers/button"
-import Modal from "@/app/components/Modal"
-import { ProgressBar } from "react-bootstrap"
-import DateTimeRenderer from "@/app/helpers/datetimeRenderer"
+import Button from "@/app/helpers/button";
+import Modal from "@/app/components/Modal";
+import { ProgressBar } from "react-bootstrap";
+import DateTimeRenderer from "@/app/helpers/datetimeRenderer";
 
-export default function Rebates() {
-  const router = useRouter()
+import withAuth from "../components/withAuth";
+
+function Rebates() {
+  const router = useRouter();
 
   const ButtonRenderer = (props) => {
     const handleMatchClick = () => {
-      router.push("/priceRebates/" + props.data.id + "/match")
-    }
+      router.push("/priceRebates/" + props.data.id + "/match");
+    };
 
     const handleDownloadExcelClick = () => {
       const URL =
         process.env.NEXT_PUBLIC_API_URL +
         "PriceRebates/" +
         props.data.id +
-        "/DownloadExcel"
+        "/DownloadExcel";
       if (typeof window !== "undefined") {
-        window.location.href = URL
+        window.location.href = URL;
       }
-    }
+    };
 
     const handleDeleteClick = () => {
       setDeleteModalForm({
         ...deleteModalForm,
         isOpen: true,
         id: props.data.id,
-      })
-    }
+      });
+    };
     return (
       <>
         <Button onClick={handleMatchClick}>Match</Button>
@@ -49,27 +51,27 @@ export default function Rebates() {
           Delete
         </Button>
       </>
-    )
-  }
+    );
+  };
 
-  const [priceRebates, setPriceRebates] = useState([])
-  const [rowData, setRowData] = useState([])
+  const [priceRebates, setPriceRebates] = useState([]);
+  const [rowData, setRowData] = useState([]);
   const [uploadModalForm, setUploadModalForm] = useState({
     isOpen: false,
     selectedFile: null,
     uploadConnectionId: null,
     uploadProgress: 0,
     uploadIntervalId: null,
-  })
+  });
   const [deleteModalForm, setDeleteModalForm] = useState({
     isOpen: false,
     id: 0,
-  })
+  });
 
   const onUploadModalUpload = async () => {
-    const formData = new FormData()
-    formData.append("file", uploadModalForm.selectedFile)
-    formData.append("connectionId", uploadModalForm.connectionId)
+    const formData = new FormData();
+    formData.append("file", uploadModalForm.selectedFile);
+    formData.append("connectionId", uploadModalForm.connectionId);
 
     const response = await fetchWrapper
       .post(`PriceRebates/UploadExcel`, formData, {
@@ -78,50 +80,50 @@ export default function Rebates() {
         },
       })
       .then(async (resp) => {
-        let respJson = await resp.json()
+        let respJson = await resp.json();
 
         const uploadIntervalId = setInterval(
           () => checkProgressJob(respJson.id),
           5000
-        )
+        );
         setUploadModalForm((prev) => ({
           ...prev,
           uploadIntervalId: uploadIntervalId,
-        }))
-      })
-  }
+        }));
+      });
+  };
 
   const checkProgressJob = async (id) => {
     const resp = await fetchWrapper
       .get(`PriceRebates/` + id)
       .then(async (resp2) => {
-        let resp2Json = await resp2.json()
+        let resp2Json = await resp2.json();
         let progress =
-          (resp2Json.currentUploadRow / resp2Json.totalUploadRow) * 100
+          (resp2Json.currentUploadRow / resp2Json.totalUploadRow) * 100;
         setUploadModalForm((prev) => ({
           ...prev,
           uploadProgress: progress,
-        }))
-      })
-  }
+        }));
+      });
+  };
 
   useEffect(() => {
-    if (uploadModalForm.uploadProgress === 0) return
+    if (uploadModalForm.uploadProgress === 0) return;
     console.log(
       uploadModalForm.uploadIntervalId,
       uploadModalForm.uploadProgress
-    )
+    );
     if (uploadModalForm.uploadProgress === 100) {
-      clearInterval(uploadModalForm.uploadIntervalId)
+      clearInterval(uploadModalForm.uploadIntervalId);
       setUploadModalForm((prev) => ({
         ...prev,
         isOpen: false,
         uploadProgress: 0,
         uploadIntervalId: null,
-      }))
-      refreshRowData()
+      }));
+      refreshRowData();
     }
-  }, [uploadModalForm.uploadProgress])
+  }, [uploadModalForm.uploadProgress]);
 
   const handleUploadBtnClick = () => {
     setUploadModalForm({
@@ -129,46 +131,47 @@ export default function Rebates() {
       connectionId: null,
       uploadProgress: 0,
       isOpen: true,
-    })
-  }
+    });
+  };
 
   const onUploadModalClose = async () => {
     setUploadModalForm({
       ...uploadModalForm,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const handleFileUpload = (e) => {
     setUploadModalForm({
       ...uploadModalForm,
       selectedFile: e.target.files[0],
-    })
-  }
+    });
+  };
 
   const confirmDeleteBtnClickHandler = async (e) => {
     const response = await fetchWrapper.delete(
       `PriceRebates/${deleteModalForm.id}`
-    )
+    );
 
     if (response.ok) {
-      await refreshRowData()
+      await refreshRowData();
       setDeleteModalForm({
         ...deleteModalForm,
         isOpen: false,
-      })
+      });
     }
-  }
+  };
 
   const deleteModalCloseBtnClickHandler = async (e) => {
     setDeleteModalForm({
       ...deleteModalForm,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const [columnDefs] = useState([
     { headerName: "ID", field: "id", width: 50 },
+    { headerName: "Status", field: "status", width: 250 },
     { headerName: "Excel Filename", field: "excelFilename", width: 250 },
     { headerName: "Filename", field: "filename", width: 250 },
     { headerName: "Current Upload Row", field: "currentUploadRow", width: 250 },
@@ -187,9 +190,9 @@ export default function Rebates() {
       cellRenderer: ButtonRenderer,
       width: 350,
     },
-  ])
+  ]);
 
-  const frameworkComponents = { buttonRenderer: ButtonRenderer }
+  const frameworkComponents = { buttonRenderer: ButtonRenderer };
 
   const sideBar = {
     toolPanels: [
@@ -202,20 +205,20 @@ export default function Rebates() {
         toolPanelParams: {},
       },
     ],
-  }
+  };
 
   const refreshRowData = async () => {
-    const response = await fetchWrapper.get("PriceRebates")
-    const data = await response.json()
-    console.log(data)
-    setRowData(data)
-  }
+    const response = await fetchWrapper.get("PriceRebates");
+    const data = await response.json();
+    console.log(data);
+    setRowData(data);
+  };
 
   useEffect(() => {
-    ;(async () => {
-      refreshRowData()
-    })()
-  }, [])
+    (async () => {
+      refreshRowData();
+    })();
+  }, []);
 
   return (
     <div>
@@ -223,7 +226,7 @@ export default function Rebates() {
       <div className="p-2">
         <Button
           onClick={() => {
-            handleUploadBtnClick()
+            handleUploadBtnClick();
           }}
         >
           Upload
@@ -281,5 +284,7 @@ export default function Rebates() {
         </div>
       )}
     </div>
-  )
+  );
 }
+
+export default withAuth(Rebates);

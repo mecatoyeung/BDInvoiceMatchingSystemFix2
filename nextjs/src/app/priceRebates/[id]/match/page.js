@@ -1,23 +1,28 @@
-"use client"
+"use client";
 
-import { useMemo, useRef } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useMemo, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-import fetchWrapper from "@helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
+import { AgGridReact } from "ag-grid-react";
 
-import Modal from "@/app/components/Modal"
-import CustomToolPanel from "@/app/components/agGrid/columnsToolPanel"
+import Modal from "@/app/components/Modal";
+import CustomToolPanel from "@/app/components/agGrid/columnsToolPanel";
 
-import Button from "@helpers/button"
-import DateRenderer from "@helpers/dateRenderer"
-import DateTimeRenderer from "@helpers/datetimeRenderer"
-import DecimalRenderer from "@helpers/decimalRenderer"
+import Button from "@helpers/button";
+import DateRenderer from "@helpers/dateRenderer";
+import DateTimeRenderer from "@helpers/datetimeRenderer";
+import DecimalRenderer from "@helpers/decimalRenderer";
 
-export default function RebateMatch() {
-  const router = useRouter()
+import withAuth from "@/app/components/withAuth";
+
+function RebateMatch() {
+  const router = useRouter();
+  const params = useParams();
+
+  const { id } = params;
 
   const [
     modifyDocumentFromCashewItemModal,
@@ -39,7 +44,7 @@ export default function RebateMatch() {
     quantity: 0,
     pdfFilename: "",
     csvFilename: "",
-  })
+  });
 
   const [
     deleteDocumentFromCashewItemModal,
@@ -47,14 +52,21 @@ export default function RebateMatch() {
   ] = useState({
     isOpen: false,
     id: 0,
-  })
+  });
 
   const [
     documentFromCashewItemsColumnsModal,
     setDocumentFromCashewItemsColumnsModal,
   ] = useState({
     isOpen: false,
-  })
+  });
+
+  const [autoMatchProgress, setAutoMatchProgress] = useState({
+    status: "READY",
+    priceRebateItemsCount: 0,
+    matchedPriceRebateItemsCount: 0,
+    autoMatchProgress: 0.0,
+  });
 
   const DocumentFromCashewItemsButtonRenderer = (props) => {
     const handleDownloadPdfClick = () => {
@@ -62,27 +74,27 @@ export default function RebateMatch() {
         process.env.NEXT_PUBLIC_API_URL +
         "DocumentsFromCashew/" +
         props.data.documentFromCashewID +
-        "/DownloadPdf"
+        "/DownloadPdf";
       if (typeof window !== "undefined") {
-        window.location.href = URL
+        window.location.href = URL;
       }
-    }
+    };
 
     const handleModifyClick = () => {
       setModifyDocumentFromCashewItemModal({
         ...modifyDocumentFromCashewItemModal,
         isOpen: true,
         ...props.node.data,
-      })
-    }
+      });
+    };
 
     const handleDeleteClick = () => {
       setDeleteDocumentFromCashewItemModal({
         ...deleteDocumentFromCashewItemModal,
         isOpen: true,
         id: props.node.data.id,
-      })
-    }
+      });
+    };
 
     return (
       <>
@@ -92,8 +104,8 @@ export default function RebateMatch() {
           Delete
         </Button>
       </>
-    )
-  }
+    );
+  };
 
   const documentFromCashewItemModalSaveBtnClickHandler = async () => {
     await fetchWrapper.put(
@@ -101,45 +113,45 @@ export default function RebateMatch() {
       {
         ...modifyDocumentFromCashewItemModal,
       }
-    )
+    );
 
-    await onRowSelectedPriceRebateItems()
+    await onRowSelectedPriceRebateItems();
 
     setModifyDocumentFromCashewItemModal({
       ...modifyDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const documentFromCashewItemModalCloseBtnClickHandler = () => {
     setModifyDocumentFromCashewItemModal({
       ...modifyDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const deleteDocumentFromCashewItemModalConfirmDeleteBtnClickHandler =
     async () => {
       await fetchWrapper.delete(
         `DocumentFromCashewItems/${deleteDocumentFromCashewItemModal.id}`
-      )
+      );
 
-      await onRowSelectedPriceRebateItems()
+      await onRowSelectedPriceRebateItems();
 
       setDeleteDocumentFromCashewItemModal({
         ...deleteDocumentFromCashewItemModal,
         isOpen: false,
-      })
-    }
+      });
+    };
 
   const deleteDocumentFromCashewItemModalCloseBtnClickHandler = () => {
     setDeleteDocumentFromCashewItemModal({
       ...deleteDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
-  const priceRebateItemsGridRef = useRef(null)
+  const priceRebateItemsGridRef = useRef(null);
 
   const priceRebateItemsRowSelection = useMemo(() => {
     return {
@@ -148,21 +160,21 @@ export default function RebateMatch() {
         return (
           selectedPriceRebateItemsDocumentNos.length == 0 ||
           selectedPriceRebateItemsDocumentNos.includes(rowNode.data.documentNo)
-        )
+        );
       },
-    }
-  }, [])
+    };
+  }, []);
 
   const priceRebateItemsIsRowSelctable = (rowNode) => {
-    return true
+    return true;
     return (
       selectedPriceRebateItemsDocumentNos.length == 0 ||
       selectedPriceRebateItemsDocumentNos.includes(rowNode.data.documentNo)
-    )
-  }
+    );
+  };
 
   const onPriceRebateSelectionChanged = (e) => {
-    const selectedNodes = e.api.getSelectedNodes()
+    const selectedNodes = e.api.getSelectedNodes();
 
     selectedNodes.forEach((node) => {
       if (
@@ -170,59 +182,59 @@ export default function RebateMatch() {
         selectedPriceRebateItemsDocumentNos.includes(node.data.documentNo)
       ) {
       } else {
-        node.setSelected(false)
+        node.setSelected(false);
       }
-    })
-  }
+    });
+  };
 
   const onRowSelectedPriceRebateItems = async () => {
     const priceRebateItemsSelectedRows =
-      priceRebateItemsGridRef.current.api.getSelectedRows()
-    let documentNos = priceRebateItemsSelectedRows.map((r) => r.documentNo)
+      priceRebateItemsGridRef.current.api.getSelectedRows();
+    let documentNos = priceRebateItemsSelectedRows.map((r) => r.documentNo);
     documentNos = documentNos.filter(
       (value, index, array) => array.indexOf(value) === index
-    )
-    setSelectedPriceRebateItemsDocumentNos(documentNos)
+    );
+    setSelectedPriceRebateItemsDocumentNos(documentNos);
 
-    let ids = priceRebateItemsSelectedRows.map((r) => r.id)
-    setSelectedPriceRebateItemsIDs(ids)
+    let ids = priceRebateItemsSelectedRows.map((r) => r.id);
+    setSelectedPriceRebateItemsIDs(ids);
 
-    await getDocumentFromCashewItemsByDocumentNos(documentNos)
+    await getDocumentFromCashewItemsByDocumentNos(documentNos);
 
     let matchingIDs = priceRebateItemsSelectedRows.map((r) =>
       r.matchingID == null ? 0 : r.matchingID
-    )
-    setMatchings(matchingIDs)
-  }
+    );
+    setMatchings(matchingIDs);
+  };
 
-  const documentFromCashewItemsGridRef = useRef(null)
+  const documentFromCashewItemsGridRef = useRef(null);
 
   const documentFromCashewItemsRowSelection = useMemo(() => {
     return {
       mode: "multiRow",
-    }
-  }, [])
+    };
+  }, []);
 
   const onRowSelectedDocumentFromCashewItems = () => {
     const documentFromCashewItemsSelectedRows =
-      documentFromCashewItemsGridRef.current.api.getSelectedRows()
+      documentFromCashewItemsGridRef.current.api.getSelectedRows();
     let documentNos = documentFromCashewItemsSelectedRows.map(
       (r) => r.documentNo
-    )
+    );
     documentNos = documentNos.filter(
       (value, index, array) => array.indexOf(value) === index
-    )
-    setSelectedDocumentFromCashewItemsDocumentNos(documentNos)
+    );
+    setSelectedDocumentFromCashewItemsDocumentNos(documentNos);
 
-    let ids = documentFromCashewItemsSelectedRows.map((r) => r.id)
-    setSelectedDocumentFromCashewItemsIDs(ids)
-    console.log(documentFromCashewItemsSelectedRows)
-  }
+    let ids = documentFromCashewItemsSelectedRows.map((r) => r.id);
+    setSelectedDocumentFromCashewItemsIDs(ids);
+    console.log(documentFromCashewItemsSelectedRows);
+  };
 
   const [priceRebateItemsGridOptions, setPriceRebateItemsGridOptions] =
     useState({
       animateRows: false,
-    })
+    });
 
   const [priceRebateItemsColumnDefs, setPriceRebateItemsColumnDefs] = useState([
     {
@@ -280,7 +292,7 @@ export default function RebateMatch() {
       field: "matched",
       width: 150,
     },
-  ])
+  ]);
 
   const initialItems = [
     { id: 0, text: "One", color: "#616AFF" },
@@ -293,34 +305,34 @@ export default function RebateMatch() {
     { id: 7, text: "Eight", color: "#21C8B7" },
     { id: 8, text: "Nine", color: "#FED67D" },
     { id: 9, text: "Ten", color: "#013540" },
-  ]
+  ];
 
   const getDocumentFromCashewItemsByDocumentNos = async (documentNos) => {
     const url = new URL(
       "https://api.example.com/DocumentFromCashewItems/ByDocumentNos"
-    )
-    const urlParams = new URLSearchParams()
-    if (documentNos.length == 0) documentNos = []
-    documentNos = [documentNos[0]]
+    );
+    const urlParams = new URLSearchParams();
+    if (documentNos.length == 0) documentNos = [];
+    documentNos = [documentNos[0]];
     documentNos.forEach((documentNo) => {
-      urlParams.append("documentNos", documentNo)
-    })
-    url.search = urlParams.toString()
-    const completeUrl = url.toString().replace("https://api.example.com/", "")
+      urlParams.append("documentNos", documentNo);
+    });
+    url.search = urlParams.toString();
+    const completeUrl = url.toString().replace("https://api.example.com/", "");
 
-    const documentFromCashewItemsResponse = await fetchWrapper.get(completeUrl)
+    const documentFromCashewItemsResponse = await fetchWrapper.get(completeUrl);
     const documentFromCashewItemsData =
-      await documentFromCashewItemsResponse.json()
-    setDocumentFromCashewItemsRowData(documentFromCashewItemsData)
-  }
+      await documentFromCashewItemsResponse.json();
+    setDocumentFromCashewItemsRowData(documentFromCashewItemsData);
+  };
 
   const matchBtnClickHandler = async () => {
     try {
       let response = await fetchWrapper.post("Matching/Match", {
         priceRebateItems: selectedPriceRebateItemsIDs,
         documentFromCashewItems: selectedDocumentFromCashewItemsIDs,
-      })
-      let data = await response.json()
+      });
+      let data = await response.json();
       setModalForm({
         ...modalForm,
         isOpen: true,
@@ -330,7 +342,7 @@ export default function RebateMatch() {
             <p>{data.message}</p>
           </>
         ),
-      })
+      });
     } catch (e) {
       setModalForm({
         ...modalForm,
@@ -341,24 +353,24 @@ export default function RebateMatch() {
             <p>{e.message}</p>
           </>
         ),
-      })
+      });
     }
     const priceRebateItemsSelectedRows =
-      priceRebateItemsGridRef.current.api.getSelectedRows()
-    let documentNos = priceRebateItemsSelectedRows.map((r) => r.documentNo)
+      priceRebateItemsGridRef.current.api.getSelectedRows();
+    let documentNos = priceRebateItemsSelectedRows.map((r) => r.documentNo);
     documentNos = documentNos.filter(
       (value, index, array) => array.indexOf(value) === index
-    )
-    setSelectedPriceRebateItemsDocumentNos(documentNos)
+    );
+    setSelectedPriceRebateItemsDocumentNos(documentNos);
 
-    await getPriceRebates()
-  }
+    await getPriceRebates();
+  };
 
   const unmatchBtnClickHandler = async () => {
     try {
       var response = await fetchWrapper.post("Matching/Unmatch", {
         priceRebateItems: selectedPriceRebateItemsIDs,
-      })
+      });
       setModalForm({
         ...modalForm,
         isOpen: true,
@@ -368,9 +380,9 @@ export default function RebateMatch() {
             <p>{response.message}</p>
           </>
         ),
-      })
+      });
     } catch (e) {
-      console.error(e.message)
+      console.error(e.message);
       setModalForm({
         ...modalForm,
         isOpen: true,
@@ -380,31 +392,89 @@ export default function RebateMatch() {
             <p>{e.message}</p>
           </>
         ),
-      })
+      });
     }
-    await getPriceRebates()
-  }
+    await getPriceRebates();
+  };
+
+  let automatchProgressIntervalRef = useRef(null);
+
+  const autoMatchBtnClickHandler = async () => {
+    try {
+      let response = fetchWrapper.post(`Matching/Automatch`, {
+        priceRebateId: id,
+      });
+      let progressResponse = await fetchWrapper.post(
+        `Matching/AutomatchProgress`,
+        {
+          priceRebateId: id,
+        }
+      );
+      let progressResponseData = await progressResponse.json();
+      console.log(progressResponse);
+      automatchProgressIntervalRef = setInterval(async () => {
+        var runningProgressResponse = await fetchWrapper.post(
+          `Matching/AutomatchProgress`,
+          {
+            priceRebateId: id,
+          }
+        );
+        let runningProgressResponseData = await runningProgressResponse.json();
+        if (
+          runningProgressResponseData.matchedPriceRebateItemsCount ==
+          progressResponseData.matchedPriceRebateItemsCount
+        ) {
+          //clearInterval(automatchProgressIntervalRef.current);
+          console.log(runningProgressResponseData);
+        } else {
+          console.log(runningProgressResponseData);
+        }
+      }, 5000);
+      //await getPriceRebates();
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
 
   const documentFromCashewItemsColumnsBtnClickHandler = () => {
     setDocumentFromCashewItemsColumnsModal({
       ...documentFromCashewItemsColumnsModal,
       isOpen: true,
-    })
-  }
+    });
+  };
 
   const getPriceRebates = async () => {
     const priceRebateResponse = await fetchWrapper.get(
       `PriceRebates/${params.id}`
-    )
-    const priceRebateData = await priceRebateResponse.json()
-    setPriceRebate(priceRebateData)
+    );
+
+    const priceRebateData = await priceRebateResponse.json();
+    setPriceRebate(priceRebateData);
+
+    console.log(priceRebateData);
 
     const priceRebateItemsResponse = await fetchWrapper.get(
       `PriceRebates/${params.id}/Items`
-    )
-    const priceRebateItemsData = await priceRebateItemsResponse.json()
-    setPriceRebateItemsRowData(priceRebateItemsData)
-  }
+    );
+    const priceRebateItemsData = await priceRebateItemsResponse.json();
+    setPriceRebateItemsRowData(priceRebateItemsData);
+  };
+
+  const getAutoMatchProgress = async () => {
+    const autoMatchProgressResponse = await fetchWrapper.post(
+      `Matching/AutoMatchProgress`,
+      {
+        priceRebateId: id,
+      }
+    );
+
+    const autoMatchProgressResponseData =
+      await autoMatchProgressResponse.json();
+
+    console.log(autoMatchProgressResponseData);
+
+    setAutoMatchProgress(autoMatchProgressResponseData);
+  };
 
   const [
     documentFromCashewItemsColumnDefs,
@@ -538,19 +608,19 @@ export default function RebateMatch() {
       hide: false,
       width: 350,
     },
-  ])
+  ]);
 
   const documentFromCashewItemsFrameworkComponents = {
     buttonRenderer: DocumentFromCashewItemsButtonRenderer,
-  }
+  };
 
   const getDocumentFromCashewItemsRowStyle = (params) => {
     if (matchings.includes(params.data.matchingID)) {
       return {
         backgroundColor: "lightgreen",
-      }
+      };
     }
-  }
+  };
 
   const saveDocumentFromCashewItemsColumnDefs = (
     documentFromCashewItemsColumnDefs
@@ -558,78 +628,106 @@ export default function RebateMatch() {
     localStorage.setItem(
       "documentFromCashewItemsColumnDefs",
       JSON.stringify(documentFromCashewItemsColumnDefs)
-    )
-  }
+    );
+  };
 
   const loadDefaultColumnDefs = async () => {
     const mDocumentFromCashewItemsColumnDefs = localStorage.getItem(
       "documentFromCashewItemsColumnDefs"
-    )
+    );
     if (mDocumentFromCashewItemsColumnDefs != null) {
-      let columnDefs = JSON.parse(mDocumentFromCashewItemsColumnDefs)
-      let order = columnDefs.map((d) => d.headerName)
+      let columnDefs = JSON.parse(mDocumentFromCashewItemsColumnDefs);
+      let order = columnDefs.map((d) => d.headerName);
       let updatedDocumentFromCashewItemsColumnDefs = [
         ...documentFromCashewItemsColumnDefs,
-      ]
+      ];
       for (
         let i = 0;
         i < updatedDocumentFromCashewItemsColumnDefs.length;
         i++
       ) {
         let updatedDocumentFromCashewItemsColumnDef =
-          updatedDocumentFromCashewItemsColumnDefs[i]
+          updatedDocumentFromCashewItemsColumnDefs[i];
         let columnDef = columnDefs.find(
           (d) => d.field == updatedDocumentFromCashewItemsColumnDef.field
-        )
-        updatedDocumentFromCashewItemsColumnDefs.hide = columnDef.hide
+        );
+        updatedDocumentFromCashewItemsColumnDefs.hide = columnDef.hide;
       }
       updatedDocumentFromCashewItemsColumnDefs.sort(
         (a, b) => order.indexOf(a.headerName) - order.indexOf(b.headerName)
-      )
+      );
       setDocumentFromCashewItemsColumnDefs(
         updatedDocumentFromCashewItemsColumnDefs
-      )
+      );
     }
-  }
+  };
 
-  const [priceRebate, setPriceRebate] = useState(null)
-  const [priceRebateItemsRowData, setPriceRebateItemsRowData] = useState([])
+  const [priceRebate, setPriceRebate] = useState(null);
+  const [priceRebateItemsRowData, setPriceRebateItemsRowData] = useState([]);
   const [documentFromCashewForm, setDocumentFromCashewForm] = useState({
     showAllUnmatched: false,
-  })
+  });
   const [documentFromCashewItemsRowData, setDocumentFromCashewItemsRowData] =
-    useState([])
-  const [selectedMatchings, setSelectedMatchings] = useState([])
+    useState([]);
+  const [selectedMatchings, setSelectedMatchings] = useState([]);
 
   const [
     selectedPriceRebateItemsDocumentNos,
     setSelectedPriceRebateItemsDocumentNos,
-  ] = useState([])
+  ] = useState([]);
   const [selectedPriceRebateItemsIDs, setSelectedPriceRebateItemsIDs] =
-    useState([])
+    useState([]);
 
   const [
     selectedDocumentFromCashewItemsDocumentNos,
     setSelectedDocumentFromCashewItemsDocumentNos,
-  ] = useState([])
+  ] = useState([]);
   const [
     selectedDocumentFromCashewItemsIDs,
     setSelectedDocumentFromCashewItemsIDs,
-  ] = useState([])
-  const [matchings, setMatchings] = useState([])
+  ] = useState([]);
+  const [matchings, setMatchings] = useState([]);
   const [modalForm, setModalForm] = useState({
     isOpen: false,
     content: <></>,
-  })
+  });
 
-  const params = useParams()
+  const [autoMatchModalForm, setAutoMatchModalForm] = useState({
+    isOpen: false,
+  });
 
   useEffect(() => {
-    ;(async () => {
-      await getPriceRebates()
-      await loadDefaultColumnDefs()
-    })()
-  }, [])
+    (async () => {
+      await getPriceRebates();
+      await loadDefaultColumnDefs();
+      const getAutoMatchProgressIntervalId = setInterval(async () => {
+        await getAutoMatchProgress();
+      }, 5000);
+    })();
+  }, []);
+
+  useEffect(() => {
+    /*const getAutoMatchProgressIntervalId = setInterval(async () => {
+      await getAutoMatchProgress();
+    }, 5000);
+
+    return () => clearInterval(getAutoMatchProgressIntervalId);*/
+
+    let isCancelled = false;
+
+    const runUpdateAutoMatchProgress = async () => {
+      await getAutoMatchProgress();
+      if (!isCancelled) {
+        setTimeout(runUpdateAutoMatchProgress, 5000); // wait 5s after finish
+      }
+    };
+
+    runUpdateAutoMatchProgress();
+
+    return () => {
+      isCancelled = true; // cleanup on unmount
+    };
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -681,6 +779,14 @@ export default function RebateMatch() {
                       <span className="text-sm">All Matched!</span>
                     </label>
                   </div>
+                  <div className="mb-4">
+                    <p>
+                      <span>
+                        Auto Match Status: {autoMatchProgress.status}, Progress:{" "}
+                        {autoMatchProgress.autoMatchProgress}
+                      </span>
+                    </p>
+                  </div>
                 </div>
                 <div>
                   <div className="mb-4">
@@ -696,6 +802,9 @@ export default function RebateMatch() {
               </div>
               <Button onClick={() => matchBtnClickHandler()}>Match!</Button>
               <Button onClick={() => unmatchBtnClickHandler()}>Unmatch!</Button>
+              <Button onClick={() => autoMatchBtnClickHandler()}>
+                Automatch
+              </Button>
             </>
           )}
         </div>
@@ -714,20 +823,20 @@ export default function RebateMatch() {
               onSelectionChanged={onPriceRebateSelectionChanged}
               onRowSelected={onRowSelectedPriceRebateItems}
               onRowDataUpdated={async () => {
-                let documentNos = []
-                const gridApi = priceRebateItemsGridRef.current.api
+                let documentNos = [];
+                const gridApi = priceRebateItemsGridRef.current.api;
                 gridApi.forEachNode((node) => {
                   if (selectedPriceRebateItemsIDs.includes(node.data.id)) {
-                    node.setSelected(true)
-                    documentNos.push(node.data.documentNo)
+                    node.setSelected(true);
+                    documentNos.push(node.data.documentNo);
                   }
-                })
+                });
 
                 documentNos = documentNos.filter(
                   (value, index, array) => array.indexOf(value) === index
-                )
-                console.log(documentNos)
-                await getDocumentFromCashewItemsByDocumentNos(documentNos)
+                );
+                console.log(documentNos);
+                await getDocumentFromCashewItemsByDocumentNos(documentNos);
               }}
             ></AgGridReact>
           </div>
@@ -745,14 +854,14 @@ export default function RebateMatch() {
               rowSelection={documentFromCashewItemsRowSelection}
               onRowSelected={onRowSelectedDocumentFromCashewItems}
               onRowDataUpdated={() => {
-                const gridApi = documentFromCashewItemsGridRef.current.api
+                const gridApi = documentFromCashewItemsGridRef.current.api;
                 gridApi.forEachNode((node) => {
                   if (
                     selectedDocumentFromCashewItemsIDs.includes(node.data.id)
                   ) {
-                    node.setSelected(true)
+                    node.setSelected(true);
                   }
-                })
+                });
               }}
             ></AgGridReact>
           </div>
@@ -822,7 +931,7 @@ export default function RebateMatch() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       customerCode: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -875,7 +984,7 @@ export default function RebateMatch() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       documentDate: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -898,7 +1007,7 @@ export default function RebateMatch() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       deliveryDate: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -921,7 +1030,7 @@ export default function RebateMatch() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       documentNo: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -938,7 +1047,7 @@ export default function RebateMatch() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     stockCode: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -955,7 +1064,7 @@ export default function RebateMatch() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     description: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -972,7 +1081,7 @@ export default function RebateMatch() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     lotNo: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -989,7 +1098,7 @@ export default function RebateMatch() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     unitOfMeasure: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -1006,7 +1115,7 @@ export default function RebateMatch() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     quantity: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -1098,13 +1207,13 @@ export default function RebateMatch() {
                               onClick={() => {
                                 let updatedDocumentFromCashewItemsColumnDefs = [
                                   ...documentFromCashewItemsColumnDefs,
-                                ]
+                                ];
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ].hide = false
+                                ].hide = false;
                                 setDocumentFromCashewItemsColumnDefs(
                                   updatedDocumentFromCashewItemsColumnDefs
-                                )
+                                );
                               }}
                             >
                               Show
@@ -1115,13 +1224,13 @@ export default function RebateMatch() {
                               onClick={() => {
                                 let updatedDocumentFromCashewItemsColumnDefs = [
                                   ...documentFromCashewItemsColumnDefs,
-                                ]
+                                ];
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ].hide = true
+                                ].hide = true;
                                 setDocumentFromCashewItemsColumnDefs(
                                   updatedDocumentFromCashewItemsColumnDefs
-                                )
+                                );
                               }}
                             >
                               Hide
@@ -1129,27 +1238,27 @@ export default function RebateMatch() {
                           )}
                           <Button
                             onClick={() => {
-                              if (itemIndex == 0) return
+                              if (itemIndex == 0) return;
                               let updatedDocumentFromCashewItemsColumnDefs = [
                                 ...documentFromCashewItemsColumnDefs,
-                              ]
+                              ];
                               let tmpColumnDef = {
                                 ...updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex - 1
                                 ],
-                              }
+                              };
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex - 1
                               ] =
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ]
+                                ];
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex
-                              ] = tmpColumnDef
+                              ] = tmpColumnDef;
                               setDocumentFromCashewItemsColumnDefs(
                                 updatedDocumentFromCashewItemsColumnDefs
-                              )
+                              );
                             }}
                           >
                             &uarr;
@@ -1160,27 +1269,27 @@ export default function RebateMatch() {
                                 itemIndex >=
                                 documentFromCashewItemsColumnDefs.length - 1
                               )
-                                return
+                                return;
                               let updatedDocumentFromCashewItemsColumnDefs = [
                                 ...documentFromCashewItemsColumnDefs,
-                              ]
+                              ];
                               let tmpColumnDef = {
                                 ...updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
                                 ],
-                              }
+                              };
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex
                               ] =
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex + 1
-                                ]
+                                ];
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex + 1
-                              ] = tmpColumnDef
+                              ] = tmpColumnDef;
                               setDocumentFromCashewItemsColumnDefs(
                                 updatedDocumentFromCashewItemsColumnDefs
-                              )
+                              );
                             }}
                           >
                             &darr;
@@ -1215,6 +1324,29 @@ export default function RebateMatch() {
           </div>
         </div>
       )}
+      {autoMatchModalForm.isOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <div className="mb-4">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                PDF Filename (Read only)
+              </label>
+              <input
+                type="text"
+                id="pdfFilename"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                value={
+                  modifyDocumentFromCashewItemModal.documentFromCashew
+                    .pdfFilename
+                }
+                readOnly
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
+
+export default withAuth(RebateMatch);

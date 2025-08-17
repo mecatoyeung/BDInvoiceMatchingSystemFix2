@@ -32,9 +32,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(builder.Configuration.GetConnectionString("Default") ?? String.Empty);
 });
 
-builder.Services.Configure<FormOptions>(options => { 
-    options.MemoryBufferThreshold = int.MaxValue; 
-    options.MultipartBodyLengthLimit = int.MaxValue; 
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MemoryBufferThreshold = int.MaxValue;
+    options.MultipartBodyLengthLimit = int.MaxValue;
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -106,7 +107,10 @@ builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSet
 builder.Services.Configure<MySettings>(builder.Configuration.GetSection("MySettings"));
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+}
 );
 builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -121,6 +125,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddHostedService<FileCaptureService>();
 builder.Services.AddHostedService<PriceRebateUploadService>();
+builder.Services.AddHostedService<AutoMatchBackgroundService>();
 
 
 builder.Logging.ClearProviders();

@@ -4,6 +4,13 @@ using BDInvoiceMatchingSystem.WebAPI.Enums;
 
 namespace BDInvoiceMatchingSystem.WebAPI.Models
 {
+    public enum PriceRebateType
+    {
+        READY,
+        QUEUED,
+        PROCCESSING,
+        COMPLETED
+    }
     public class PriceRebate
     {
         [Key]
@@ -12,9 +19,13 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
 
         [Required]
         [Column(TypeName = "NVARCHAR(255)")]
+        public PriceRebateType Status { get; set; }
+
+        [Required]
+        [Column(TypeName = "NVARCHAR(255)")]
         public string? ExcelFilename { get; set; } = String.Empty;
 
-        public string? Filename { get; set;} = String.Empty;
+        public string? Filename { get; set; } = String.Empty;
 
         public byte[]? ExcelFile { get; set; }
 
@@ -27,6 +38,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
         public int CurrentUploadRow { get; set; }
 
         public int TotalUploadRow { get; set; }
+
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal AutoMatchProgress { get; set; }
 
         public string UploadError { get; set; } = String.Empty;
 

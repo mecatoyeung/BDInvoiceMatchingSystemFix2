@@ -1,30 +1,32 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
-import fetchWrapper from "@/app/helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@/app/helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
+import { AgGridReact } from "ag-grid-react";
 
-import Button from "@/app/helpers/button"
-import Modal from "@/app/components/Modal"
-import DateTimeRenderer from "@/app/helpers/datetimeRenderer"
+import Button from "@/app/helpers/button";
+import Modal from "@/app/components/Modal";
+import DateTimeRenderer from "@/app/helpers/datetimeRenderer";
 
-export default function FileSources() {
-  const router = useRouter()
+import withAuth from "../components/withAuth";
+
+function FileSources() {
+  const router = useRouter();
 
   const ButtonRenderer = (props) => {
     const handleModifyClick = () => {
-      router.push("/fileSources/" + props.data.id)
-    }
+      router.push("/fileSources/" + props.data.id);
+    };
     const handleDeleteClick = () => {
       setDeleteModalForm({
         ...deleteModalForm,
         isOpen: true,
         id: props.data.id,
-      })
-    }
+      });
+    };
     return (
       <>
         <Button onClick={handleModifyClick}>Modify</Button>
@@ -32,35 +34,35 @@ export default function FileSources() {
           Delete
         </Button>
       </>
-    )
-  }
+    );
+  };
 
-  const [rowData, setRowData] = useState([])
+  const [rowData, setRowData] = useState([]);
   const [deleteModalForm, setDeleteModalForm] = useState({
     isOpen: false,
     id: 0,
-  })
+  });
 
   const confirmDeleteBtnClickHandler = async (e) => {
     const response = await fetchWrapper.delete(
       `FileSources/${deleteModalForm.id}`
-    )
+    );
 
     if (response.ok) {
-      await refreshRowData()
+      await refreshRowData();
       setDeleteModalForm({
         ...deleteModalForm,
         isOpen: false,
-      })
+      });
     }
-  }
+  };
 
   const deleteModalCloseBtnClickHandler = async (e) => {
     setDeleteModalForm({
       ...deleteModalForm,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const [columnDefs] = useState([
     { headerName: "ID", field: "id", width: 50 },
@@ -71,21 +73,21 @@ export default function FileSources() {
       cellRenderer: ButtonRenderer,
       width: 250,
     },
-  ])
+  ]);
 
-  const frameworkComponents = { buttonRenderer: ButtonRenderer }
+  const frameworkComponents = { buttonRenderer: ButtonRenderer };
 
   const refreshRowData = async () => {
-    const response = await fetchWrapper.get("FileSources")
-    const data = await response.json()
-    setRowData(data)
-  }
+    const response = await fetchWrapper.get("FileSources");
+    const data = await response.json();
+    setRowData(data);
+  };
 
   useEffect(() => {
-    ;(async () => {
-      refreshRowData()
-    })()
-  }, [])
+    (async () => {
+      refreshRowData();
+    })();
+  }, []);
 
   return (
     <div>
@@ -120,5 +122,7 @@ export default function FileSources() {
         </div>
       )}
     </div>
-  )
+  );
 }
+
+export default withAuth(FileSources);

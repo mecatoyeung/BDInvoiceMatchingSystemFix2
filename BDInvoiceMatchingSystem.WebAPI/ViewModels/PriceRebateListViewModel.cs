@@ -6,6 +6,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.ViewModels
     {
         public long ID { get; set; }
 
+        public string? Status { get; set; } = String.Empty;
+
         public string? ExcelFilename { get; set; } = String.Empty;
 
         public string? Filename { get; set; } = String.Empty;

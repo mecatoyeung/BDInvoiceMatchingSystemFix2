@@ -132,7 +132,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.ToTable("customerApproximateMappings");
+                    b.ToTable("CustomerApproximateMappings");
                 });
 
             modelBuilder.Entity("BDInvoiceMatchingSystem.WebAPI.Models.DocumentFromCashew", b =>

@@ -1,51 +1,53 @@
-"use client"
+"use client";
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation";
 
-import fetchWrapper from "@/app/helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@/app/helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
+import { AgGridReact } from "ag-grid-react";
 
-import Button from "@/app/helpers/button"
-import Modal from "@/app/components/Modal"
-import DateTimeRenderer from "@/app/helpers/datetimeRenderer"
+import Button from "@/app/helpers/button";
+import Modal from "@/app/components/Modal";
+import DateTimeRenderer from "@/app/helpers/datetimeRenderer";
 
-export default function Settings() {
-  const params = useParams()
+import withAuth from "../components/withAuth";
 
-  const router = useRouter()
+function Settings() {
+  const params = useParams();
 
-  const [priceRebateSetting, setPriceRebateSetting] = useState(null)
+  const router = useRouter();
+
+  const [priceRebateSetting, setPriceRebateSetting] = useState(null);
   const [responseMessage, setResponseMessage] = useState({
     type: "Success",
     message: "",
-  })
+  });
 
   const getPriceRebateSetting = async () => {
-    const response = await fetchWrapper.get(`PriceRebateSetting`)
-    const data = await response.json()
-    setPriceRebateSetting(data)
-  }
+    const response = await fetchWrapper.get(`PriceRebateSetting`);
+    const data = await response.json();
+    setPriceRebateSetting(data);
+  };
 
   const saveBtnClickHandler = async () => {
-    setResponseMessage(null)
+    setResponseMessage(null);
     const response = await fetchWrapper.put(`PriceRebateSetting`, {
       ...priceRebateSetting,
-    })
+    });
     if (response.ok) {
       setResponseMessage({
         type: "success",
         message: "Price Rebate Setting is updated successfully!",
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    ;(async () => {
-      getPriceRebateSetting()
-    })()
-  }, [])
+    (async () => {
+      getPriceRebateSetting();
+    })();
+  }, []);
 
   return (
     <div>
@@ -78,7 +80,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     documentNoHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -95,7 +97,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     stockCodeHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -112,7 +114,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     descriptionHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -129,7 +131,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     quantityHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -146,7 +148,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     unitPriceHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -163,7 +165,7 @@ export default function Settings() {
                   setPriceRebateSetting({
                     ...priceRebateSetting,
                     subtotalInUSDHeaderName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -171,5 +173,7 @@ export default function Settings() {
         </div>
       )}
     </div>
-  )
+  );
 }
+
+export default withAuth(Settings);

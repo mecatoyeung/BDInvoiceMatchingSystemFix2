@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rC1UiFMVC2gP/TGklWGYHInHkSQuErAsesgK7UbW9kuFaUWn4RGZgwcHXkVJV5ozGJNlhVCrvJVeu+bEIhDHAg==",
+  "dgSpecHash": "RfaEfbPlky+/84oA2Ct7nFEyUTmKLWKiwjrZZdnX/E8/zeCcd5uf35rEJbAY78ltqP0ngzWmj+IE5btJnIsaJg==",
   "success": true,
-  "projectFilePath": "/home/risksis/BDInvoiceMatchingSystem/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
+  "projectFilePath": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
   "expectedPackageFiles": [
     "/home/risksis/.nuget/packages/automapper/13.0.1/automapper.13.0.1.nupkg.sha512",
     "/home/risksis/.nuget/packages/bouncycastle.cryptography/2.3.1/bouncycastle.cryptography.2.3.1.nupkg.sha512",

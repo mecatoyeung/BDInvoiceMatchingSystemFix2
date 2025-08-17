@@ -16,7 +16,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("BDInvoiceMatchingSystem.WebAPI.Models.ApplicationUser", b =>
@@ -129,7 +129,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
 
                     b.HasIndex("CustomerID");
 
-                    b.ToTable("customerApproximateMappings");
+                    b.ToTable("CustomerApproximateMappings");
                 });
 
             modelBuilder.Entity("BDInvoiceMatchingSystem.WebAPI.Models.DocumentFromCashew", b =>
@@ -371,6 +371,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<decimal>("AutoMatchProgress")
+                        .HasColumnType("decimal(10, 2)");
+
                     b.Property<int>("CurrentUploadRow")
                         .HasColumnType("int");
 
@@ -383,6 +386,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
 
                     b.Property<string>("Filename")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(255)");
 
                     b.Property<int>("TotalUploadRow")
                         .HasColumnType("int");
@@ -410,6 +417,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("AutoMatchCompleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Description")
                         .IsRequired()

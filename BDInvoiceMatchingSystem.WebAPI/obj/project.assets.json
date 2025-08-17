@@ -6303,11 +6303,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/risksis/BDInvoiceMatchingSystem/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
+      "projectUniqueName": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
       "projectName": "BDInvoiceMatchingSystem.WebAPI",
-      "projectPath": "/home/risksis/BDInvoiceMatchingSystem/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
+      "projectPath": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
       "packagesPath": "/home/risksis/.nuget/packages/",
-      "outputPath": "/home/risksis/BDInvoiceMatchingSystem/BDInvoiceMatchingSystem.WebAPI/obj/",
+      "outputPath": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/risksis/.nuget/NuGet/NuGet.Config"
@@ -6434,7 +6434,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.114/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

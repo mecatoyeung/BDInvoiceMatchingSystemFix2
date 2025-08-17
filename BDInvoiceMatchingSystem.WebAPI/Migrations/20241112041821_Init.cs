@@ -291,7 +291,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "customerApproximateMappings",
+                name: "CustomerApproximateMappings",
                 columns: table => new
                 {
                     ID = table.Column<long>(type: "bigint", nullable: false)
@@ -301,9 +301,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_customerApproximateMappings", x => x.ID);
+                    table.PrimaryKey("PK_CustomerApproximateMappings", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_customerApproximateMappings_Customers_CustomerID",
+                        name: "FK_CustomerApproximateMappings_Customers_CustomerID",
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
@@ -414,8 +414,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_customerApproximateMappings_CustomerID",
-                table: "customerApproximateMappings",
+                name: "IX_CustomerApproximateMappings_CustomerID",
+                table: "CustomerApproximateMappings",
                 column: "CustomerID");
 
             migrationBuilder.CreateIndex(
@@ -528,7 +528,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "customerApproximateMappings");
+                name: "CustomerApproximateMappings");
 
             migrationBuilder.DropTable(
                 name: "DocumentFromCashewItems");

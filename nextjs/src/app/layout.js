@@ -1,51 +1,51 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-import localFont from "next/font/local"
+import localFont from "next/font/local";
 
-import { isBrowser } from "./helpers/isBrowser"
+import { isBrowser } from "./helpers/isBrowser";
 
-import "./globals.css"
+import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
-})
+});
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
-})
+});
 
 export default function RootLayout({ children }) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState("");
 
   const logoutBtnClickHandler = () => {
     if (isBrowser()) {
-      localStorage.removeItem("Username")
-      localStorage.removeItem("X-Access-Token")
-      setUsername("")
-      router.push("/account/login")
-      router.refresh()
+      localStorage.removeItem("Username");
+      localStorage.removeItem("X-Access-Token");
+      setUsername("");
+      router.push("/account/login");
+      router.refresh();
     }
-  }
+  };
 
   const loginBtnClickHandler = () => {
     if (isBrowser()) {
-      router.push("/account/login")
+      router.push("/account/login");
     }
-  }
+  };
 
   useEffect(() => {
-    setUsername(localStorage.getItem("Username") ?? "")
-  }, [router.isReady])
+    setUsername(localStorage.getItem("Username") ?? "");
+  }, [router.isReady]);
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -120,11 +120,6 @@ export default function RootLayout({ children }) {
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="text-white hover:text-gray-400">
-                      About
-                    </Link>
-                  </li>
-                  <li>
                     <div className="dropdown dropdown-hover">
                       {username && (
                         <>
@@ -180,5 +175,5 @@ export default function RootLayout({ children }) {
         </div>
       </body>
     </html>
-  )
+  );
 }

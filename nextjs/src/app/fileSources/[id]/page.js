@@ -1,15 +1,17 @@
-"use client"
+"use client";
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation";
 
-import fetchWrapper from "@/app/helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@/app/helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
+import { AgGridReact } from "ag-grid-react";
 
-import Button from "@/app/helpers/button"
-import Modal from "@/app/components/Modal"
-import DateTimeRenderer from "@/app/helpers/datetimeRenderer"
+import Button from "@/app/helpers/button";
+import Modal from "@/app/components/Modal";
+import DateTimeRenderer from "@/app/helpers/datetimeRenderer";
+
+import withAuth from "@/app/components/withAuth";
 
 const documentClasses = [
   {
@@ -20,43 +22,43 @@ const documentClasses = [
     value: 2,
     label: "Delivery Note",
   },
-]
+];
 
-export default function FileSources() {
-  const params = useParams()
+function FileSource() {
+  const params = useParams();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const [fileSource, setFileSource] = useState(null)
+  const [fileSource, setFileSource] = useState(null);
   const [responseMessage, setResponseMessage] = useState({
     type: "Success",
     message: "",
-  })
+  });
 
   const getFileSource = async () => {
-    const response = await fetchWrapper.get(`FileSources/${params.id}`)
-    const data = await response.json()
-    setFileSource(data)
-  }
+    const response = await fetchWrapper.get(`FileSources/${params.id}`);
+    const data = await response.json();
+    setFileSource(data);
+  };
 
   const saveBtnClickHandler = async () => {
-    setResponseMessage(null)
+    setResponseMessage(null);
     const response = await fetchWrapper.put(`FileSources/${params.id}`, {
       ...fileSource,
-    })
+    });
     if (response.ok) {
       setResponseMessage({
         type: "success",
         message: "File Source is updated successfully!",
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    ;(async () => {
-      getFileSource()
-    })()
-  }, [])
+    (async () => {
+      getFileSource();
+    })();
+  }, []);
 
   return (
     <div>
@@ -89,7 +91,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     folderPath: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -108,7 +110,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     documentClass: e.value,
-                  })
+                  });
                 }}
                 readOnly
               >
@@ -129,7 +131,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     documentNoColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -146,7 +148,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     documentDateColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -163,7 +165,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     deliveryDateColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -180,7 +182,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     customerCodeColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -197,7 +199,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     customerNameColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -214,7 +216,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     customerAddressColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -231,7 +233,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     stockCodeColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -248,7 +250,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     descriptionColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -265,7 +267,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     lotNoColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -282,7 +284,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     quantityColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -299,7 +301,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     unitOfMeasureColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -316,7 +318,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     unitPriceColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -333,7 +335,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     subtotalColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -350,7 +352,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     filenameColName: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -365,7 +367,7 @@ export default function FileSources() {
                     setFileSource({
                       ...fileSource,
                       firstRowIsHeader: !fileSource.firstRowIsHeader,
-                    })
+                    });
                   }}
                 />
                 <span className="text-sm">First Row is Header</span>
@@ -384,7 +386,7 @@ export default function FileSources() {
                   setFileSource({
                     ...fileSource,
                     intervalInSeconds: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -405,5 +407,7 @@ export default function FileSources() {
         </div>
       )}
     </div>
-  )
+  );
 }
+
+export default withAuth(FileSource);

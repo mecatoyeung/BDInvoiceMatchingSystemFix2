@@ -1,51 +1,57 @@
-"use client"
+"use client";
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation";
 
-import fetchWrapper from "@/app/helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@/app/helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import Button from "@/app/helpers/button"
+import Button from "@/app/helpers/button";
 
 export default function Login() {
-  const params = useParams()
+  const params = useParams();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
     status: "initial",
     message: "",
-  })
+  });
 
   const loginBtnClickHandler = async () => {
     const response = await fetchWrapper.post("Account/Authenticate", {
       ...loginForm,
-    })
+    });
 
     if (response.ok) {
-      const data = await response.json()
-      localStorage.setItem("Username", data.username)
-      localStorage.setItem("X-Access-Token", data.token)
-      window.location.href = "/"
+      const data = await response.json();
+      localStorage.setItem("Username", data.username);
+      localStorage.setItem("X-Access-Token", data.token);
+      window.location.href = "/";
     } else {
-      const data = await response.json()
+      const data = await response.json();
       setLoginForm({
         ...loginForm,
         status: "error",
         message: data.message,
-      })
+      });
     }
-  }
+  };
 
   const registerBtnClickHandler = async () => {
-    router.push("/account/register")
-  }
+    router.push("/account/register");
+  };
+
+  const handleKeyDownInForm = async (event) => {
+    if (event.key === "Enter") {
+      await loginBtnClickHandler();
+    }
+  };
 
   useEffect(() => {
-    ;(async () => {})()
-  }, [])
+    (async () => {})();
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -74,8 +80,9 @@ export default function Login() {
                 setLoginForm({
                   ...loginForm,
                   email: e.target.value,
-                })
+                });
               }}
+              onKeyDown={handleKeyDownInForm}
             />
           </label>
           <label className="input input-bordered flex items-center gap-2 m-2">
@@ -100,13 +107,14 @@ export default function Login() {
                 setLoginForm({
                   ...loginForm,
                   password: e.target.value,
-                })
+                });
               }}
+              onKeyDown={handleKeyDownInForm}
             />
           </label>
           {loginForm.status == "error" && (
             <p className="bg-gray-200 text-error m-2 p-2">
-              {loginForm.message}
+              Login failed. Please try again.
             </p>
           )}
           {loginForm.status == "success" && (
@@ -117,6 +125,7 @@ export default function Login() {
           <button
             className="btn btn-primary m-2"
             onClick={loginBtnClickHandler}
+            type="submit"
           >
             Sign In
           </button>
@@ -126,5 +135,5 @@ export default function Login() {
         </div>
       </main>
     </div>
-  )
+  );
 }

@@ -17,6 +17,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
         void Update(T entity);
         void Delete(T entity);
         void DeleteByConditions(Expression<Func<T, bool>> whereConditions);
+        Task<bool> Any(Expression<Func<T, bool>> whereConditions);
+        Task<long> Count(Expression<Func<T, bool>> whereConditions);
         void ExecuteRawSql(string sql);
         Task<bool> AnyAsync(Expression<Func<T, bool>> entity, CancellationToken cancellationToken = default);
     }
@@ -79,6 +81,16 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
         {
             var toBeRemoved = _context.Set<T>().Where(whereConditions);
             _context.Set<T>().RemoveRange(toBeRemoved);
+        }
+
+        public async Task<bool> Any(Expression<Func<T, bool>> whereConditions)
+        {
+            return await _context.Set<T>().AnyAsync(whereConditions);
+        }
+
+        public async Task<long> Count(Expression<Func<T, bool>> whereConditions)
+        {
+            return await _context.Set<T>().CountAsync(whereConditions);
         }
 
         public void ExecuteRawSql(string sql)

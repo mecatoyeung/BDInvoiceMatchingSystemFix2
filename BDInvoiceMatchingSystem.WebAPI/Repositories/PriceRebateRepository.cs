@@ -22,6 +22,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
         public async Task<PriceRebate> GetByIdAsync(long id)
         {
             var rec = await _context.PriceRebates.Include(pr => pr.PriceRebateItems).FirstAsync(p => p.ID == id);
+            rec.Status = rec.Status;
             rec.AllItemsAreMatched = rec.PriceRebateItems.All(i => i.Matched);
             return rec;
         }
@@ -30,7 +31,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
         {
             return await _context.PriceRebates.AsQueryable().Select(p => new PriceRebate
             {
-                ID = p.ID, 
+                ID = p.ID,
+                Status = p.Status,
                 ExcelFilename = p.ExcelFilename,
                 Filename = p.Filename,
                 CurrentUploadRow = p.CurrentUploadRow,

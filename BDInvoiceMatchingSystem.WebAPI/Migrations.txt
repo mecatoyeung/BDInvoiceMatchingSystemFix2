@@ -1,4 +1,4 @@
-﻿dotnet ef migrations add AddedUploadErrorColToPriceRebate --project BDInvoiceMatchingSystem.WebAPI
+﻿dotnet ef migrations add AddedAutoMatchProgress --project BDInvoiceMatchingSystem.WebAPI
 
 dotnet ef database update --project BDInvoiceMatchingSystem.WebAPI
 

@@ -9,7 +9,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Data
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<CustomerApproximateMapping> customerApproximateMappings { get; set; }
+        public DbSet<CustomerApproximateMapping> CustomerApproximateMappings { get; set; }
         public DbSet<FileSource> FileSources { get; set; }
         public DbSet<DocumentFromCashew> DocumentsFromCashew { get; set; }
         public DbSet<DocumentFromCashewItem> DocumentFromCashewItems { get; set; }

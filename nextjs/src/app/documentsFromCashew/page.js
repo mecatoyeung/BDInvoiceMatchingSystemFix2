@@ -1,35 +1,37 @@
-"use client"
+"use client";
 
-import { useMemo, useRef } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useMemo, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-import fetchWrapper from "@helpers/fetchWrapper"
-import { useEffect, useState } from "react"
+import fetchWrapper from "@helpers/fetchWrapper";
+import { useEffect, useState } from "react";
 
-import { AgGridReact } from "ag-grid-react"
+import { AgGridReact } from "ag-grid-react";
 
-import Modal from "@/app/components/Modal"
-import CustomToolPanel from "@/app/components/agGrid/columnsToolPanel"
+import Modal from "@/app/components/Modal";
+import CustomToolPanel from "@/app/components/agGrid/columnsToolPanel";
 
-import Button from "@helpers/button"
-import DateRenderer from "@helpers/dateRenderer"
-import DateTimeRenderer from "@helpers/datetimeRenderer"
-import DecimalRenderer from "@helpers/decimalRenderer"
-import moment from "moment"
+import Button from "@helpers/button";
+import DateRenderer from "@helpers/dateRenderer";
+import DateTimeRenderer from "@helpers/datetimeRenderer";
+import DecimalRenderer from "@helpers/decimalRenderer";
+import moment from "moment";
 
-export default function DocumentsFromCashew() {
-  const router = useRouter()
+import withAuth from "../components/withAuth";
 
-  const [gridApi, setGridApi] = useState(null)
-  const [paginationPageSize, setPaginationPageSize] = useState(1000)
-  const [currentPage, setCurrentPage] = useState(1)
+function DocumentsFromCashew() {
+  const router = useRouter();
+
+  const [gridApi, setGridApi] = useState(null);
+  const [paginationPageSize, setPaginationPageSize] = useState(1000);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortModel, setSortModel] = useState([
     {
       colId: "ID",
       sort: "desc",
     },
-  ])
-  const [filterModel, setFilterModel] = useState([])
+  ]);
+  const [filterModel, setFilterModel] = useState([]);
 
   const [
     modifyDocumentFromCashewItemModal,
@@ -51,7 +53,7 @@ export default function DocumentsFromCashew() {
     quantity: 0,
     pdfFilename: "",
     csvFilename: "",
-  })
+  });
 
   const DocumentFromCashewItemsButtonRenderer = (props) => {
     const handleDownloadPdfClick = () => {
@@ -59,39 +61,39 @@ export default function DocumentsFromCashew() {
         process.env.NEXT_PUBLIC_API_URL +
         "DocumentsFromCashew/" +
         props.data.documentFromCashewID +
-        "/DownloadPdf"
+        "/DownloadPdf";
       if (typeof window !== "undefined") {
-        window.location.href = URL
+        window.location.href = URL;
       }
-    }
+    };
 
     const handleDownloadCsvClick = () => {
       const URL =
         process.env.NEXT_PUBLIC_API_URL +
         "DocumentsFromCashew/" +
         props.data.documentFromCashewID +
-        "/DownloadCsv"
+        "/DownloadCsv";
       if (typeof window !== "undefined") {
-        window.location.href = URL
+        window.location.href = URL;
       }
-    }
+    };
 
     const handleModifyClick = () => {
-      console.log(props.node.data)
+      console.log(props.node.data);
       setModifyDocumentFromCashewItemModal({
         ...modifyDocumentFromCashewItemModal,
         isOpen: true,
         ...props.node.data,
-      })
-    }
+      });
+    };
 
     const handleDeleteClick = () => {
       setDeleteDocumentFromCashewItemModal({
         ...deleteDocumentFromCashewItemModal,
         isOpen: true,
         id: props.node.data.id,
-      })
-    }
+      });
+    };
 
     return (
       <>
@@ -102,8 +104,8 @@ export default function DocumentsFromCashew() {
           Delete
         </Button>
       </>
-    )
-  }
+    );
+  };
 
   const [
     deleteDocumentFromCashewItemModal,
@@ -111,14 +113,14 @@ export default function DocumentsFromCashew() {
   ] = useState({
     isOpen: false,
     id: 0,
-  })
+  });
 
   const [
     documentFromCashewItemsColumnsModal,
     setDocumentFromCashewItemsColumnsModal,
   ] = useState({
     isOpen: false,
-  })
+  });
 
   const documentFromCashewItemModalSaveBtnClickHandler = async () => {
     await fetchWrapper.put(
@@ -126,86 +128,86 @@ export default function DocumentsFromCashew() {
       {
         ...modifyDocumentFromCashewItemModal,
       }
-    )
+    );
 
-    await getDocumentFromCashewItemsPagination(filterModel)
+    await getDocumentFromCashewItemsPagination(filterModel);
 
     setModifyDocumentFromCashewItemModal({
       ...modifyDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const documentFromCashewItemModalCloseBtnClickHandler = () => {
     setModifyDocumentFromCashewItemModal({
       ...modifyDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
   const deleteDocumentFromCashewItemModalConfirmDeleteBtnClickHandler =
     async () => {
       await fetchWrapper.delete(
         `DocumentFromCashewItems/${deleteDocumentFromCashewItemModal.id}`
-      )
+      );
 
       setDeleteDocumentFromCashewItemModal({
         ...deleteDocumentFromCashewItemModal,
         isOpen: false,
-      })
+      });
 
-      await getDocumentFromCashewItemsPagination(filterModel)
-    }
+      await getDocumentFromCashewItemsPagination(filterModel);
+    };
 
   const deleteDocumentFromCashewItemModalCloseBtnClickHandler = () => {
     setDeleteDocumentFromCashewItemModal({
       ...deleteDocumentFromCashewItemModal,
       isOpen: false,
-    })
-  }
+    });
+  };
 
-  const documentFromCashewItemsGridRef = useRef(null)
+  const documentFromCashewItemsGridRef = useRef(null);
 
   const documentFromCashewItemsRowSelection = useMemo(() => {
     return {
       mode: "multiRow",
-    }
-  }, [])
+    };
+  }, []);
 
   const onGridReady = (params) => {
-    setGridApi(params.api)
-  }
+    setGridApi(params.api);
+  };
 
   const onRowSelectedDocumentFromCashewItems = () => {
     const documentFromCashewItemsSelectedRows =
-      documentFromCashewItemsGridRef.current.api.getSelectedRows()
+      documentFromCashewItemsGridRef.current.api.getSelectedRows();
     let documentNos = documentFromCashewItemsSelectedRows.map(
       (r) => r.documentNo
-    )
+    );
     documentNos = documentNos.filter(
       (value, index, array) => array.indexOf(value) === index
-    )
-    setSelectedDocumentFromCashewItemsDocumentNos(documentNos)
+    );
+    setSelectedDocumentFromCashewItemsDocumentNos(documentNos);
 
-    let ids = documentFromCashewItemsSelectedRows.map((r) => r.id)
-    setSelectedDocumentFromCashewItemsIDs(ids)
-  }
+    let ids = documentFromCashewItemsSelectedRows.map((r) => r.id);
+    setSelectedDocumentFromCashewItemsIDs(ids);
+  };
 
   const getDocumentFromCashewItemsPagination = async (mFilterModel) => {
-    let queryStringInArray = []
+    let queryStringInArray = [];
     for (let i = 0; i < mFilterModel.length; i++) {
-      queryStringInArray.push("fieldName=" + mFilterModel[i].fieldName)
-      queryStringInArray.push("fieldType=" + mFilterModel[i].fieldType)
-      queryStringInArray.push("filterType=" + mFilterModel[i].filterType)
-      queryStringInArray.push("filterValue=" + mFilterModel[i].filterValue)
+      queryStringInArray.push("fieldName=" + mFilterModel[i].fieldName);
+      queryStringInArray.push("fieldType=" + mFilterModel[i].fieldType);
+      queryStringInArray.push("filterType=" + mFilterModel[i].filterType);
+      queryStringInArray.push("filterValue=" + mFilterModel[i].filterValue);
     }
     //if (queryStringInArray.length == 0) return
-    let queryString = queryStringInArray.join("&")
+    let queryString = queryStringInArray.join("&");
     const documentFromCashewItemsResponse = await fetchWrapper.get(
       `DocumentFromCashewItems/Pagination?${queryString}`
-    )
+    );
     let documentFromCashewItemsData =
-      await documentFromCashewItemsResponse.json()
+      await documentFromCashewItemsResponse.json();
 
     for (let i = 0; i < documentFromCashewItemsData.pageData.length; i++) {
       try {
@@ -214,11 +216,11 @@ export default function DocumentsFromCashew() {
         ].documentFromCashew.documentDate = moment(
           documentFromCashewItemsData.pageData[i].documentFromCashew
             .documentDate
-        ).format("YYYY-MM-DD")
+        ).format("YYYY-MM-DD");
       } catch {
         documentFromCashewItemsData.pageData[
           i
-        ].documentFromCashew.documentDate = null
+        ].documentFromCashew.documentDate = null;
       }
 
       try {
@@ -227,17 +229,17 @@ export default function DocumentsFromCashew() {
         ].documentFromCashew.deliveryDate = moment(
           documentFromCashewItemsData.pageData[i].documentFromCashew
             .deliveryDate
-        ).format("YYYY-MM-DD")
+        ).format("YYYY-MM-DD");
       } catch {
         documentFromCashewItemsData.pageData[
           i
-        ].documentFromCashew.deliveryDate = null
+        ].documentFromCashew.deliveryDate = null;
       }
     }
 
-    setDocumentFromCashewItemsRowData(documentFromCashewItemsData.pageData)
-    return documentFromCashewItemsData
-  }
+    setDocumentFromCashewItemsRowData(documentFromCashewItemsData.pageData);
+    return documentFromCashewItemsData;
+  };
 
   const [
     documentFromCashewItemsColumnDefs,
@@ -374,38 +376,38 @@ export default function DocumentsFromCashew() {
       hide: false,
       width: 550,
     },
-  ])
+  ]);
 
   const documentFromCashewItemsFrameworkComponents = {
     buttonRenderer: DocumentFromCashewItemsButtonRenderer,
-  }
+  };
 
   const getDocumentFromCashewItemsRowStyle = (params) => {
     if (matchings.includes(params.data.matchingID)) {
       return {
         backgroundColor: "lightgreen",
-      }
+      };
     }
-  }
+  };
 
-  const onPaginationChanged = async (params) => {}
+  const onPaginationChanged = async (params) => {};
 
-  const onSortChanged = async (params) => {}
+  const onSortChanged = async (params) => {};
 
   const onFilterChanged = async (params) => {
-    let mFilterModel = params.api.getFilterModel()
-    let mFilterModelInArray = []
+    let mFilterModel = params.api.getFilterModel();
+    let mFilterModelInArray = [];
     for (const [key, value] of Object.entries(mFilterModel)) {
       mFilterModelInArray.push({
         fieldName: key,
         fieldType: value.filterType,
         filterType: value.type,
         filterValue: value.filter,
-      })
+      });
     }
-    setFilterModel(mFilterModelInArray)
-    getDocumentFromCashewItemsPagination(mFilterModelInArray)
-  }
+    setFilterModel(mFilterModelInArray);
+    getDocumentFromCashewItemsPagination(mFilterModelInArray);
+  };
 
   const saveDocumentFromCashewItemsColumnDefs = (
     documentFromCashewItemsColumnDefs
@@ -413,78 +415,78 @@ export default function DocumentsFromCashew() {
     localStorage.setItem(
       "documentFromCashewItemsColumnDefs",
       JSON.stringify(documentFromCashewItemsColumnDefs)
-    )
-  }
+    );
+  };
 
   const loadDefaultColumnDefs = async () => {
     const mDocumentFromCashewItemsColumnDefs = localStorage.getItem(
       "documentFromCashewItemsColumnDefs"
-    )
+    );
     if (mDocumentFromCashewItemsColumnDefs != null) {
-      let columnDefs = JSON.parse(mDocumentFromCashewItemsColumnDefs)
-      let order = columnDefs.map((d) => d.headerName)
+      let columnDefs = JSON.parse(mDocumentFromCashewItemsColumnDefs);
+      let order = columnDefs.map((d) => d.headerName);
       let updatedDocumentFromCashewItemsColumnDefs = [
         ...documentFromCashewItemsColumnDefs,
-      ]
+      ];
       for (
         let i = 0;
         i < updatedDocumentFromCashewItemsColumnDefs.length;
         i++
       ) {
         let updatedDocumentFromCashewItemsColumnDef =
-          updatedDocumentFromCashewItemsColumnDefs[i]
+          updatedDocumentFromCashewItemsColumnDefs[i];
         let columnDef = columnDefs.find(
           (d) => d.field == updatedDocumentFromCashewItemsColumnDef.field
-        )
+        );
         try {
-          updatedDocumentFromCashewItemsColumnDefs.hide = columnDef.hide
+          updatedDocumentFromCashewItemsColumnDefs.hide = columnDef.hide;
         } catch {
-          updatedDocumentFromCashewItemsColumnDefs.hide = false
+          updatedDocumentFromCashewItemsColumnDefs.hide = false;
         }
       }
       updatedDocumentFromCashewItemsColumnDefs.sort(
         (a, b) => order.indexOf(a.headerName) - order.indexOf(b.headerName)
-      )
+      );
       setDocumentFromCashewItemsColumnDefs(
         updatedDocumentFromCashewItemsColumnDefs
-      )
+      );
     }
-  }
+  };
 
   const [documentFromCashewForm, setDocumentFromCashewForm] = useState({
     showAllUnmatched: false,
-  })
+  });
   const [documentFromCashewItemsRowData, setDocumentFromCashewItemsRowData] =
-    useState([])
-  const [selectedMatchings, setSelectedMatchings] = useState([])
+    useState([]);
+  const [selectedMatchings, setSelectedMatchings] = useState([]);
 
   const [
     selectedDocumentFromCashewItemsDocumentNos,
     setSelectedDocumentFromCashewItemsDocumentNos,
-  ] = useState([])
+  ] = useState([]);
   const [
     selectedDocumentFromCashewItemsIDs,
     setSelectedDocumentFromCashewItemsIDs,
-  ] = useState([])
-  const [matchings, setMatchings] = useState([])
+  ] = useState([]);
+  const [matchings, setMatchings] = useState([]);
   const [modalForm, setModalForm] = useState({
     isOpen: false,
     content: <></>,
-  })
+  });
 
   useEffect(() => {
-    ;(async () => {
-      await getDocumentFromCashewItemsPagination(filterModel)
-      console.log("useEffect1")
-    })()
-  }, [router.isReady])
+    (async () => {
+      await getDocumentFromCashewItemsPagination(filterModel);
+      console.log("useEffect1");
+    })();
+  }, [router.isReady]);
 
   useEffect(() => {
-    ;(async () => {
-      await loadDefaultColumnDefs()
-      console.log("useEffect2")
-    })()
-  }, [])
+    (async () => {
+      await loadDefaultColumnDefs();
+      console.log("useEffect2");
+    })();
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -515,14 +517,14 @@ export default function DocumentsFromCashew() {
               onSortChanged={onSortChanged}
               onFilterChanged={onFilterChanged}
               onRowDataUpdated={() => {
-                const gridApi = documentFromCashewItemsGridRef.current.api
+                const gridApi = documentFromCashewItemsGridRef.current.api;
                 gridApi.forEachNode((node) => {
                   if (
                     selectedDocumentFromCashewItemsIDs.includes(node.data.id)
                   ) {
-                    node.setSelected(true)
+                    node.setSelected(true);
                   }
-                })
+                });
               }}
             ></AgGridReact>
           </div>
@@ -592,7 +594,7 @@ export default function DocumentsFromCashew() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       customerCode: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -645,7 +647,7 @@ export default function DocumentsFromCashew() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       documentDate: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -668,7 +670,7 @@ export default function DocumentsFromCashew() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       deliveryDate: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -691,7 +693,7 @@ export default function DocumentsFromCashew() {
                       ...modifyDocumentFromCashewItemModal.documentFromCashew,
                       documentNo: e.target.value,
                     },
-                  })
+                  });
                 }}
               />
             </div>
@@ -708,7 +710,7 @@ export default function DocumentsFromCashew() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     stockCode: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -725,7 +727,7 @@ export default function DocumentsFromCashew() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     description: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -742,7 +744,7 @@ export default function DocumentsFromCashew() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     lotNo: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -759,7 +761,7 @@ export default function DocumentsFromCashew() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     unitOfMeasure: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -776,7 +778,7 @@ export default function DocumentsFromCashew() {
                   setModifyDocumentFromCashewItemModal({
                     ...modifyDocumentFromCashewItemModal,
                     quantity: e.target.value,
-                  })
+                  });
                 }}
               />
             </div>
@@ -868,13 +870,13 @@ export default function DocumentsFromCashew() {
                               onClick={() => {
                                 let updatedDocumentFromCashewItemsColumnDefs = [
                                   ...documentFromCashewItemsColumnDefs,
-                                ]
+                                ];
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ].hide = false
+                                ].hide = false;
                                 setDocumentFromCashewItemsColumnDefs(
                                   updatedDocumentFromCashewItemsColumnDefs
-                                )
+                                );
                               }}
                             >
                               Show
@@ -885,13 +887,13 @@ export default function DocumentsFromCashew() {
                               onClick={() => {
                                 let updatedDocumentFromCashewItemsColumnDefs = [
                                   ...documentFromCashewItemsColumnDefs,
-                                ]
+                                ];
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ].hide = true
+                                ].hide = true;
                                 setDocumentFromCashewItemsColumnDefs(
                                   updatedDocumentFromCashewItemsColumnDefs
-                                )
+                                );
                               }}
                             >
                               Hide
@@ -899,27 +901,27 @@ export default function DocumentsFromCashew() {
                           )}
                           <Button
                             onClick={() => {
-                              if (itemIndex == 0) return
+                              if (itemIndex == 0) return;
                               let updatedDocumentFromCashewItemsColumnDefs = [
                                 ...documentFromCashewItemsColumnDefs,
-                              ]
+                              ];
                               let tmpColumnDef = {
                                 ...updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex - 1
                                 ],
-                              }
+                              };
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex - 1
                               ] =
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
-                                ]
+                                ];
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex
-                              ] = tmpColumnDef
+                              ] = tmpColumnDef;
                               setDocumentFromCashewItemsColumnDefs(
                                 updatedDocumentFromCashewItemsColumnDefs
-                              )
+                              );
                             }}
                           >
                             &uarr;
@@ -930,27 +932,27 @@ export default function DocumentsFromCashew() {
                                 itemIndex >=
                                 documentFromCashewItemsColumnDefs.length - 1
                               )
-                                return
+                                return;
                               let updatedDocumentFromCashewItemsColumnDefs = [
                                 ...documentFromCashewItemsColumnDefs,
-                              ]
+                              ];
                               let tmpColumnDef = {
                                 ...updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex
                                 ],
-                              }
+                              };
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex
                               ] =
                                 updatedDocumentFromCashewItemsColumnDefs[
                                   itemIndex + 1
-                                ]
+                                ];
                               updatedDocumentFromCashewItemsColumnDefs[
                                 itemIndex + 1
-                              ] = tmpColumnDef
+                              ] = tmpColumnDef;
                               setDocumentFromCashewItemsColumnDefs(
                                 updatedDocumentFromCashewItemsColumnDefs
-                              )
+                              );
                             }}
                           >
                             &darr;
@@ -986,5 +988,7 @@ export default function DocumentsFromCashew() {
         </div>
       )}
     </div>
-  )
+  );
 }
+
+export default withAuth(DocumentsFromCashew);
