@@ -140,6 +140,15 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete("BatchDelete")]
+        public IActionResult BatchDeleteDocumentFromCashewItem([FromBody] BatchDeleteDocumentFromCashewItemForm form)
+        {
+            string sql = $"DELETE FROM DocumentFromCashewItems WHERE Id IN ({string.Join(",", form.Ids)})";
+            _unitOfWork.DocumentFromCashewItems.ExecuteRawSql(sql);
+
+            return NoContent();
+        }
+
         private async Task<bool> DocumentFromCashewItemExists(long id)
         {
             return await _unitOfWork.DocumentFromCashewItems.AnyAsync(e => e.ID == id);

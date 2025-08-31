@@ -249,7 +249,8 @@ function DocumentsFromCashew() {
       headerName: "",
       field: "select",
       checkboxSelection: true,
-      headerCheckboxSelection: false,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
       width: 50,
     },
     { headerName: "ID", field: "id", width: 50 },
@@ -453,6 +454,19 @@ function DocumentsFromCashew() {
     }
   };
 
+  const deleteSelectedRows = async () => {
+    const selectedRows = gridApi.getSelectedRows();
+    const selectedIds = selectedRows.map(row => row.id)
+    await fetchWrapper.delete(
+      `DocumentFromCashewItems/BatchDelete`,
+      {
+        ids: selectedIds
+      }
+    );
+
+    await getDocumentFromCashewItemsPagination(filterModel);
+  };
+
   const [documentFromCashewForm, setDocumentFromCashewForm] = useState({
     showAllUnmatched: false,
   });
@@ -492,6 +506,7 @@ function DocumentsFromCashew() {
     <div className="flex flex-col">
       <h1 className="m-2 font-bold">Documents from Cashew</h1>
       <div className="p-2">
+        <Button variant="danger" onClick={deleteSelectedRows}>Delete</Button>
         <Button onClick={() => router.push("/priceRebates")}>Back</Button>
       </div>
       <main className="flex flex-col">

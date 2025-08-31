@@ -3,6 +3,7 @@ using System;
 using BDInvoiceMatchingSystem.WebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BDInvoiceMatchingSystem.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250818130107_AddedAutoMatchIndex")]
+    partial class AddedAutoMatchIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -357,14 +360,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("DocumentFromCashewItemID")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
-
-                    b.Property<long>("PriceRebateItemID")
-                        .HasColumnType("bigint");
 
                     b.HasKey("ID");
 

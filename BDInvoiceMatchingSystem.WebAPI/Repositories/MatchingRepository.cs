@@ -5,17 +5,17 @@ using System.Linq.Expressions;
 
 namespace BDInvoiceMatchingSystem.WebAPI.Repositories
 {
-    public interface IMatchingRepository : IGenericRepository<MatchingViewModel>
+    public interface IMatchingRepository : IGenericRepository<Matching>
     {
-        Task<IEnumerable<MatchingViewModel>> GetByConditions(Expression<Func<MatchingViewModel, bool>> whereConditions);
+        Task<IEnumerable<Matching>> GetByConditions(Expression<Func<Matching, bool>> whereConditions);
     }
-    public class MatchingRepository : GenericRepository<MatchingViewModel>, IMatchingRepository
+    public class MatchingRepository : GenericRepository<Matching>, IMatchingRepository
     {
         public MatchingRepository(ApplicationDbContext context) : base(context)
         {
         }
 
-        public new async Task<IEnumerable<MatchingViewModel>> GetByConditions(Expression<Func<MatchingViewModel, bool>> whereConditions)
+        public new async Task<IEnumerable<Matching>> GetByConditions(Expression<Func<Matching, bool>> whereConditions)
         {
             return await _context.Matchings.
                 Include(p => p.PriceRebateItems).

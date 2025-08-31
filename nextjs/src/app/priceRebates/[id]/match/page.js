@@ -46,12 +46,24 @@ function RebateMatch() {
     csvFilename: "",
   });
 
+  const [priceRebateCounts, setPriceRebateCount] = useState({
+    matchedCount: null,
+    unmatchedCount : null
+  })
+
   const [
     deleteDocumentFromCashewItemModal,
     setDeleteDocumentFromCashewItemModal,
   ] = useState({
     isOpen: false,
     id: 0,
+  });
+
+  const [
+    priceRebateItemsColumnsModal,
+    setPriceRebateItemsColumnsModal,
+  ] = useState({
+    isOpen: false,
   });
 
   const [
@@ -291,6 +303,7 @@ function RebateMatch() {
       headerName: "Matched?",
       field: "matched",
       width: 150,
+      filter: "agSetColumnFilter",
     },
   ]);
 
@@ -411,7 +424,14 @@ function RebateMatch() {
         }
       );
       let progressResponseData = await progressResponse.json();
-      console.log(progressResponse);
+      
+      setAutoMatchProgress({
+        status: "PROCESSING",
+        priceRebateItemsCount: 0,
+        matchedPriceRebateItemsCount: 0,
+        autoMatchProgress: 0.0,
+      });
+
       automatchProgressIntervalRef = setInterval(async () => {
         var runningProgressResponse = await fetchWrapper.post(
           `Matching/AutomatchProgress`,
@@ -436,6 +456,13 @@ function RebateMatch() {
     }
   };
 
+  const priceRebateItemsColumnsBtnClickHandler = () => {
+    setPriceRebateItemsColumnsModal({
+      ...priceRebateItemsColumnsModal,
+      isOpen: true,
+    });
+  };
+
   const documentFromCashewItemsColumnsBtnClickHandler = () => {
     setDocumentFromCashewItemsColumnsModal({
       ...documentFromCashewItemsColumnsModal,
@@ -449,7 +476,12 @@ function RebateMatch() {
     );
 
     const priceRebateData = await priceRebateResponse.json();
-    setPriceRebate(priceRebateData);
+    setPriceRebate(priceRebateData.priceRebate);
+    
+    setPriceRebateCount({
+      matchedCount: priceRebateData.matchedCount,
+      unmatchedCount: priceRebateData.unmatchedCount
+    })
 
     console.log(priceRebateData);
 
@@ -622,6 +654,15 @@ function RebateMatch() {
     }
   };
 
+  const savePriceRebateItemsColumnDefs = (
+    priceRebateItemsColumnDefs
+  ) => {
+    localStorage.setItem(
+      "priceRebateItemsColumnDefs",
+      JSON.stringify(priceRebateItemsColumnDefs)
+    );
+  };
+
   const saveDocumentFromCashewItemsColumnDefs = (
     documentFromCashewItemsColumnDefs
   ) => {
@@ -632,6 +673,36 @@ function RebateMatch() {
   };
 
   const loadDefaultColumnDefs = async () => {
+
+    const mPriceRebateItemsColumnDefs = localStorage.getItem(
+      "priceRebateItemsColumnDefs"
+    );
+    if (mPriceRebateItemsColumnDefs != null) {
+      let columnDefs = JSON.parse(mPriceRebateItemsColumnDefs);
+      let order = columnDefs.map((d) => d.headerName);
+      let updatedPriceRebateItemsColumnDefs = [
+        ...priceRebateItemsColumnDefs,
+      ];
+      for (
+        let i = 0;
+        i < updatedPriceRebateItemsColumnDefs.length;
+        i++
+      ) {
+        let updatedPriceRebateItemsColumnDef =
+          updatedPriceRebateItemsColumnDefs[i];
+        let columnDef = columnDefs.find(
+          (d) => d.field == updatedPriceRebateItemsColumnDef.field
+        );
+        updatedPriceRebateItemsColumnDef.hide = columnDef.hide;
+      }
+      updatedPriceRebateItemsColumnDefs.sort(
+        (a, b) => order.indexOf(a.headerName) - order.indexOf(b.headerName)
+      );
+      setPriceRebateItemsColumnDefs(
+        updatedPriceRebateItemsColumnDefs
+      );
+    }
+
     const mDocumentFromCashewItemsColumnDefs = localStorage.getItem(
       "documentFromCashewItemsColumnDefs"
     );
@@ -651,7 +722,7 @@ function RebateMatch() {
         let columnDef = columnDefs.find(
           (d) => d.field == updatedDocumentFromCashewItemsColumnDef.field
         );
-        updatedDocumentFromCashewItemsColumnDefs.hide = columnDef.hide;
+        updatedDocumentFromCashewItemsColumnDef.hide = columnDef.hide;
       }
       updatedDocumentFromCashewItemsColumnDefs.sort(
         (a, b) => order.indexOf(a.headerName) - order.indexOf(b.headerName)
@@ -686,6 +757,7 @@ function RebateMatch() {
     selectedDocumentFromCashewItemsIDs,
     setSelectedDocumentFromCashewItemsIDs,
   ] = useState([]);
+
   const [matchings, setMatchings] = useState([]);
   const [modalForm, setModalForm] = useState({
     isOpen: false,
@@ -695,6 +767,14 @@ function RebateMatch() {
   const [autoMatchModalForm, setAutoMatchModalForm] = useState({
     isOpen: false,
   });
+
+  const refreshPriceRebate = async () => {
+    await getPriceRebates()
+  }
+
+  const deselectAllBtnClickHandler = () => {
+    priceRebateItemsGridRef.current.api.deselectAll()
+  }
 
   useEffect(() => {
     (async () => {
@@ -707,32 +787,37 @@ function RebateMatch() {
   }, []);
 
   useEffect(() => {
-    /*const getAutoMatchProgressIntervalId = setInterval(async () => {
-      await getAutoMatchProgress();
-    }, 5000);
-
-    return () => clearInterval(getAutoMatchProgressIntervalId);*/
-
-    let isCancelled = false;
+    let timeoutId = null;
+    const controller = new AbortController();
 
     const runUpdateAutoMatchProgress = async () => {
-      await getAutoMatchProgress();
-      if (!isCancelled) {
-        setTimeout(runUpdateAutoMatchProgress, 5000); // wait 5s after finish
+      try {
+        // Pass signal if getAutoMatchProgress uses fetch/axios and supports AbortSignal
+        await getAutoMatchProgress({ signal: controller.signal });
+      } catch (err) {
+        if (err.name === 'AbortError') return; // intentionally aborted
+        console.error(err);
       }
+
+      // schedule next run and store id so we can clear it
+      timeoutId = setTimeout(runUpdateAutoMatchProgress, 5000);
     };
 
     runUpdateAutoMatchProgress();
 
     return () => {
-      isCancelled = true; // cleanup on unmount
+      // cancel any in-flight request
+      controller.abort();
+      // clear any pending timeout so the callback doesn't run after unmount
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, []);
 
   return (
     <div className="flex flex-col">
-      <h1 className="m-2 font-bold">Price Rebates</h1>
+      <h1 className="m-2 font-bold">Price Rebate Matching</h1>
       <div className="p-2">
+        <Button onClick={() => refreshPriceRebate()}>Refresh</Button>
         <Button onClick={() => router.push("/priceRebates")}>Back</Button>
       </div>
       <main className="flex flex-col">
@@ -782,8 +867,16 @@ function RebateMatch() {
                   <div className="mb-4">
                     <p>
                       <span>
+                        Matched: {priceRebateCounts.matchedCount}{", "}
+                        Unmatched: {priceRebateCounts.unmatchedCount}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="mb-4">
+                    <p>
+                      <span>
                         Auto Match Status: {autoMatchProgress.status}, Progress:{" "}
-                        {autoMatchProgress.autoMatchProgress}
+                        {autoMatchProgress.autoMatchProgress.toFixed(2)}%
                       </span>
                     </p>
                   </div>
@@ -792,14 +885,22 @@ function RebateMatch() {
                   <div className="mb-4">
                     <Button
                       onClick={() =>
+                        priceRebateItemsColumnsBtnClickHandler()
+                      }
+                    >
+                      Left Columns
+                    </Button>
+                    <Button
+                      onClick={() =>
                         documentFromCashewItemsColumnsBtnClickHandler()
                       }
                     >
-                      Columns
+                      Right Columns
                     </Button>
                   </div>
                 </div>
               </div>
+              <Button onClick={() => deselectAllBtnClickHandler()}>Deselect All</Button>
               <Button onClick={() => matchBtnClickHandler()}>Match!</Button>
               <Button onClick={() => unmatchBtnClickHandler()}>Unmatch!</Button>
               <Button onClick={() => autoMatchBtnClickHandler()}>
@@ -1314,6 +1415,157 @@ function RebateMatch() {
                 onClick={() =>
                   setDocumentFromCashewItemsColumnsModal({
                     ...documentFromCashewItemsColumnsModal,
+                    isOpen: false,
+                  })
+                }
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      {priceRebateItemsColumnsModal.isOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <div>
+              <ul>
+                {priceRebateItemsColumnDefs &&
+                  priceRebateItemsColumnDefs.map((item, itemIndex) => (
+                    <li key={item.id} className="m-2">
+                      <div className="flex flex-row">
+                        <div className="columnHandle">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="columnName flex-grow">
+                          {item.headerName}
+                        </div>
+                        <div className="columnActions">
+                          {item.hide && (
+                            <Button
+                              onClick={() => {
+                                let updatedPriceRebateItemsColumnDefs = [
+                                  ...priceRebateItemsColumnDefs,
+                                ];
+                                updatedPriceRebateItemsColumnDefs[
+                                  itemIndex
+                                ].hide = false;
+                                setPriceRebateItemsColumnDefs(
+                                  updatedPriceRebateItemsColumnDefs
+                                );
+                              }}
+                            >
+                              Show
+                            </Button>
+                          )}
+                          {!item.hide && (
+                            <Button
+                              onClick={() => {
+                                let updatedPriceRebateItemsColumnDefs = [
+                                  ...priceRebateItemsColumnDefs,
+                                ];
+                                updatedPriceRebateItemsColumnDefs[
+                                  itemIndex
+                                ].hide = true;
+                                setPriceRebateItemsColumnDefs(
+                                  updatedPriceRebateItemsColumnDefs
+                                );
+                              }}
+                            >
+                              Hide
+                            </Button>
+                          )}
+                          <Button
+                            onClick={() => {
+                              if (itemIndex == 0) return;
+                              let updatedPriceRebateItemsColumnDefs = [
+                                ...priceRebateItemsColumnDefs,
+                              ];
+                              let tmpColumnDef = {
+                                ...updatedPriceRebateItemsColumnDefs[
+                                  itemIndex - 1
+                                ],
+                              };
+                              updatedPriceRebateItemsColumnDefs[
+                                itemIndex - 1
+                              ] =
+                                updatedPriceRebateItemsColumnDefs[
+                                  itemIndex
+                                ];
+                              updatedPriceRebateItemsColumnDefs[
+                                itemIndex
+                              ] = tmpColumnDef;
+                              setPriceRebateItemsColumnDefs(
+                                updatedPriceRebateItemsColumnDefs
+                              );
+                            }}
+                          >
+                            &uarr;
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              if (
+                                itemIndex >=
+                                priceRebateItemsColumnDefs.length - 1
+                              )
+                                return;
+                              let updatedPriceRebateItemsColumnDefs = [
+                                ...priceRebateItemsColumnDefs,
+                              ];
+                              let tmpColumnDef = {
+                                ...updatedPriceRebateItemsColumnDefs[
+                                  itemIndex
+                                ],
+                              };
+                              updatedPriceRebateItemsColumnDefs[
+                                itemIndex
+                              ] =
+                                updatedPriceRebateItemsColumnDefs[
+                                  itemIndex + 1
+                                ];
+                              updatedPriceRebateItemsColumnDefs[
+                                itemIndex + 1
+                              ] = tmpColumnDef;
+                              setPriceRebateItemsColumnDefs(
+                                updatedPriceRebateItemsColumnDefs
+                              );
+                            }}
+                          >
+                            &darr;
+                          </Button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div className="modal-action">
+              <Button
+                onClick={() =>
+                  savePriceRebateItemsColumnDefs(
+                    priceRebateItemsColumnDefs
+                  )
+                }
+              >
+                Save as Default
+              </Button>
+              <Button
+                onClick={() =>
+                  setPriceRebateItemsColumnsModal({
+                    ...priceRebateItemsColumnsModal,
                     isOpen: false,
                   })
                 }

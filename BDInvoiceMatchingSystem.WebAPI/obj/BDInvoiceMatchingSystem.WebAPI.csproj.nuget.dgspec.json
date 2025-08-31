@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj": {}
+    "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {}
   },
   "projects": {
-    "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj": {
+    "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
         "projectName": "BDInvoiceMatchingSystem.WebAPI",
-        "projectPath": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/BDInvoiceMatchingSystem.WebAPI.csproj",
-        "packagesPath": "/home/risksis/.nuget/packages/",
-        "outputPath": "/home/risksis/BDInvoiceMatchingSystemFix2/BDInvoiceMatchingSystem.WebAPI/obj/",
+        "projectPath": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+        "packagesPath": "C:\\Users\\catoy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/risksis/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\catoy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -32,7 +38,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -138,7 +150,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.117/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

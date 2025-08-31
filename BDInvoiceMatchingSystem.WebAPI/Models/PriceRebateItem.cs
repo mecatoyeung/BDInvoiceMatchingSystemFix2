@@ -47,6 +47,6 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
         public bool AutoMatchCompleted { get; set; } = false;
 
         public long? MatchingID { get; set; }
-        public virtual MatchingViewModel? Matching { get; set; }
+        public virtual Matching? Matching { get; set; }
     }
 }

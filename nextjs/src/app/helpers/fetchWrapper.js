@@ -83,8 +83,9 @@ const fetchWrapper = {
 
     return response
   },
-  delete: async (url) => {
+  delete: async (url, body) => {
     let xAccessToken = ""
+    console.log(body)
     try {
       xAccessToken = localStorage.getItem("X-Access-Token")
     } catch {
@@ -97,6 +98,7 @@ const fetchWrapper = {
         "Access-Control-Allow-Origin": "*",
         "X-Access-Token": xAccessToken,
       },
+      body: JSON.stringify(body),
     })
 
     if (response.status == 401) {

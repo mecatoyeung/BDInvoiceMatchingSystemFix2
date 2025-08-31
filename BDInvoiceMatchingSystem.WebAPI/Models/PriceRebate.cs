@@ -4,11 +4,12 @@ using BDInvoiceMatchingSystem.WebAPI.Enums;
 
 namespace BDInvoiceMatchingSystem.WebAPI.Models
 {
-    public enum PriceRebateType
+    public enum PriceRebateStatus
     {
         READY,
         QUEUED,
         PROCCESSING,
+        PENDING,
         COMPLETED
     }
     public class PriceRebate
@@ -19,7 +20,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
 
         [Required]
         [Column(TypeName = "NVARCHAR(255)")]
-        public PriceRebateType Status { get; set; }
+        public PriceRebateStatus Status { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(255)")]
@@ -43,6 +44,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
         public decimal AutoMatchProgress { get; set; }
 
         public string UploadError { get; set; } = String.Empty;
+
+        public int AutoMatchIndex { get; set; } = 0;
 
         public ICollection<PriceRebateItem> PriceRebateItems { get; set; } = new List<PriceRebateItem>();
     }

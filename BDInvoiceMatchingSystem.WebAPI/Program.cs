@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.AspNetCore.Http.Features;
 using BDInvoiceMatchingSystem.WebAPI.Hubs;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,6 +124,7 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim("Admin"));
 });
 
+builder.Services.AddHostedService<StartupService>();
 builder.Services.AddHostedService<FileCaptureService>();
 builder.Services.AddHostedService<PriceRebateUploadService>();
 builder.Services.AddHostedService<AutoMatchBackgroundService>();
@@ -135,8 +137,15 @@ builder.Logging.ClearProviders();
     SourceName = "BD Invoice Matching System"
 });*/
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Warning()
-    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .MinimumLevel.Information()
+    .WriteTo.File(
+        "Logs/info-.txt",
+        rollingInterval: RollingInterval.Day,
+        restrictedToMinimumLevel: LogEventLevel.Information)
+    .WriteTo.File(
+        "Logs/error-.txt",
+        rollingInterval: RollingInterval.Day,
+        restrictedToMinimumLevel: LogEventLevel.Error)
     .CreateLogger();
 
 builder.Host.UseSerilog();

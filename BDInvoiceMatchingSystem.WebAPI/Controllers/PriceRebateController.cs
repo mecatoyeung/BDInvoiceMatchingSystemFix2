@@ -53,10 +53,17 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PriceRebate>> GetPriceRebate(long id)
+        public async Task<ActionResult<PriceRebateDetailListViewModel>> GetPriceRebate(long id)
         {
             var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(id);
-            return Ok(priceRebate);
+            var matchedCount = await _unitOfWork.PriceRebateItems.Count(i => i.PriceRebateID == id && i.Matched);
+            var unmatchedCount = await _unitOfWork.PriceRebateItems.Count(i => i.PriceRebateID == id && !i.Matched);
+            return Ok(new PriceRebateDetailListViewModel
+            {
+                PriceRebate = priceRebate,
+                MatchedCount = matchedCount,
+                UnmatchedCount = unmatchedCount
+            });
         }
 
         [HttpGet("{id}/Items")]
@@ -122,7 +129,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                     var result = reader.AsDataSet();
                     var dataTable = result.Tables[0];
 
-                    priceRebate.TotalUploadRow = dataTable.Rows.Count;
+                    priceRebate.TotalUploadRow = dataTable.Rows.Count - 1;
                     priceRebate.CurrentUploadRow = 0;
                 }
             }

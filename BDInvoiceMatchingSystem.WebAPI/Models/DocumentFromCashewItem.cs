@@ -33,6 +33,6 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
         public decimal Subtotal { get; set; }
         public bool Matched { get; set; }
         public long? MatchingID { get; set; }
-        public virtual MatchingViewModel? Matching { get; set; }
+        public virtual Matching? Matching { get; set; }
     }
 }

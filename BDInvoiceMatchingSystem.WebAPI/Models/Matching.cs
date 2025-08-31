@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace BDInvoiceMatchingSystem.WebAPI.Models
 {
-    public class MatchingViewModel
+    public class Matching
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

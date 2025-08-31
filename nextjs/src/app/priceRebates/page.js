@@ -171,7 +171,7 @@ function Rebates() {
 
   const [columnDefs] = useState([
     { headerName: "ID", field: "id", width: 50 },
-    { headerName: "Status", field: "status", width: 250 },
+    { headerName: "Status", field: "status", width: 100 },
     { headerName: "Excel Filename", field: "excelFilename", width: 250 },
     { headerName: "Filename", field: "filename", width: 250 },
     { headerName: "Current Upload Row", field: "currentUploadRow", width: 250 },

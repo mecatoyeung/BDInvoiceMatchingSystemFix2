@@ -36,14 +36,14 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
 
         // GET: api/matchings
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MatchingViewModel>>> GetMatchings()
+        public async Task<ActionResult<IEnumerable<Matching>>> GetMatchings()
         {
             return Ok(await _unitOfWork.FileSources.GetAllAsync());
         }
 
         // GET: api/matchings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MatchingViewModel>> GetMatching(long id)
+        public async Task<ActionResult<Matching>> GetMatching(long id)
         {
             var matching = await _unitOfWork.Matchings.GetByIdAsync(id);
 
@@ -56,7 +56,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
         }
 
         [HttpGet("Multiple")]
-        public async Task<ActionResult<MatchingViewModel>> GetMatchings([FromQuery] List<long> documentFromCashewIds)
+        public async Task<ActionResult<Matching>> GetMatchings([FromQuery] List<long> documentFromCashewIds)
         {
             var matchings = await _unitOfWork.Matchings.GetByConditions(m => documentFromCashewIds.Contains(m.ID));
 
@@ -150,31 +150,38 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                 return BadRequest(new { Message = "Quantities for both side do not balance. Please kindly check again." });
             }
 
-            var matching = new MatchingViewModel();
+            var matching = new Matching();
             matching.Name = "Matching";
             await _unitOfWork.Matchings.AddAsync(matching);
+
+            await _unitOfWork.CompleteAsync();
 
             foreach (var priceRebateItem in priceRebateItems)
             {
                 priceRebateItem.Matched = true;
+                priceRebateItem.MatchingID = matching.ID;
                 _unitOfWork.PriceRebateItems.Update(priceRebateItem);
-                matching.PriceRebateItems.Add(priceRebateItem);
             }
 
             foreach (var documentFromCashewItem in documentFromCashewItems)
             {
                 documentFromCashewItem.Matched = true;
+                documentFromCashewItem.MatchingID = matching.ID;
                 _unitOfWork.DocumentFromCashewItems.Update(documentFromCashewItem);
-                matching.DocumentFromCashewItems.Add(documentFromCashewItem);
             }
 
+            var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(priceRebateItems[0].PriceRebateID);
             var allMatched = true;
-            if (priceRebateItems.Any(i => !i.Matched))
+            if (await _unitOfWork.PriceRebateItems.Any(i => i.PriceRebateID == priceRebate.ID && !i.AutoMatchCompleted))
             {
                 allMatched = false;
             }
-            var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(priceRebateItems[0].PriceRebateID);
-            //priceRebate.AllItemsAreMatched = allMatched;
+
+            priceRebate.AllItemsAreMatched = allMatched;
+            if (allMatched)
+            {
+                priceRebate.Status = PriceRebateStatus.COMPLETED;
+            }
             _unitOfWork.PriceRebates.Update(priceRebate);
 
             await _unitOfWork.CompleteAsync();
@@ -230,7 +237,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
         public async Task<IActionResult> AutoMatch([FromBody] AutoMatchForm form)
         {
             var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(form.PriceRebateId);
-            priceRebate.Status = PriceRebateType.QUEUED;
+            priceRebate.Status = PriceRebateStatus.QUEUED;
+            _unitOfWork.PriceRebates.ExecuteRawSql(String.Format("UPDATE PriceRebateItems SET AutoMatchCompleted = FALSE WHERE PriceRebateID = {0}", priceRebate.ID));
             _unitOfWork.PriceRebates.Update(priceRebate);
             await _unitOfWork.CompleteAsync();
 
@@ -242,7 +250,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
 
             try
             {
-                priceRebate.Status = PriceRebateType.PROCCESSING;
+                priceRebate.Status = PriceRebateStatus.PROCCESSING;
                 _unitOfWork.PriceRebates.Update(priceRebate);
                 await _unitOfWork.CompleteAsync();
 
@@ -286,7 +294,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                 }
 
                 priceRebate.AllItemsAreMatched = allMatched;
-                priceRebate.Status = PriceRebateType.COMPLETED;
+                priceRebate.Status = PriceRebateStatus.COMPLETED;
                 _unitOfWork.PriceRebates.Update(priceRebate);
 
                 await _unitOfWork.CompleteAsync();
@@ -298,7 +306,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                priceRebate.Status = PriceRebateType.READY;
+                priceRebate.Status = PriceRebateStatus.READY;
                 _unitOfWork.PriceRebates.Update(priceRebate);
 
                 return BadRequest(new
@@ -312,15 +320,18 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
         public async Task<IActionResult> AutoMatchProgress([FromBody] AutoMatchForm form)
         {
             var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(form.PriceRebateId);
-            var priceRebateItemsCount = await _unitOfWork.PriceRebateItems.Count(pbi => pbi.PriceRebateID == form.PriceRebateId);
-            var matchedPriceRebateItemsCount = await _unitOfWork.PriceRebateItems.Count(pbi => pbi.PriceRebateID == form.PriceRebateId && pbi.AutoMatchCompleted);
+            var priceRebateItemsCount = priceRebate.TotalUploadRow;
+            var matchedPriceRebateItemsCount = await _unitOfWork.PriceRebateItems.Count(pbi =>
+                pbi.PriceRebateID == form.PriceRebateId &&
+                pbi.AutoMatchCompleted);
 
             return Ok(new
             {
+                PriceRebateId = priceRebate.ID,
                 priceRebate.Status,
                 PriceRebateItemsCount = priceRebateItemsCount,
                 MatchedPriceRebateItemsCount = matchedPriceRebateItemsCount,
-                priceRebate.AutoMatchProgress
+                AutoMatchProgress = new Decimal(matchedPriceRebateItemsCount) / new Decimal(priceRebateItemsCount) * 100
             });
         }
 

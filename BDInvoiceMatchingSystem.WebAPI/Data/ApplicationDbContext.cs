@@ -16,7 +16,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Data
         public DbSet<PriceRebateSetting> PriceRebateSetting { get; set; }
         public DbSet<PriceRebate> PriceRebates { get; set; }
         public DbSet<PriceRebateItem> PriceRebateItems { get; set; }
-        public DbSet<MatchingViewModel> Matchings { get; set; }
+        public DbSet<Matching> Matchings { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -79,13 +79,13 @@ namespace BDInvoiceMatchingSystem.WebAPI.Data
                 .HasIndex(c => c.PriceRebateID)
                 .HasDatabaseName("IX_PriceRebateItem_PriceRebateID");
 
-            modelBuilder.Entity<MatchingViewModel>()
+            modelBuilder.Entity<Matching>()
                 .HasMany(p => p.PriceRebateItems)
                 .WithOne(p => p.Matching)
                 .IsRequired(false)
                 .HasForeignKey(p => p.MatchingID);
 
-            modelBuilder.Entity<MatchingViewModel>()
+            modelBuilder.Entity<Matching>()
                 .HasMany(p => p.DocumentFromCashewItems)
                 .WithOne(p => p.Matching)
                 .IsRequired(false)
