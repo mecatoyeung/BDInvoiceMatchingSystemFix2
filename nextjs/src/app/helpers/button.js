@@ -6,6 +6,7 @@ const Button = ({ children, onClick, variant = "primary" }) => {
     primary: "bg-blue-500 hover:bg-blue-700",
     secondary: "bg-gray-500 hover:bg-gray-700",
     danger: "bg-red-500 hover:bg-red-700",
+    warning: "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded shadow"
   }
   return (
     <button

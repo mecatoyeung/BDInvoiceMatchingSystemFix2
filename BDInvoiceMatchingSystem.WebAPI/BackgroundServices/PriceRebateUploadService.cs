@@ -94,6 +94,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.BackgroundServices
                                 var documentNoColIndex = 0;
                                 var stockCodeColIndex = 0;
                                 var descriptionColIndex = 0;
+                                var skuColIndex = 0;
                                 var unitOfMeasureColIndex = 0;
                                 var quantityColIndex = 0;
                                 var unitPriceColIndex = 0;
@@ -111,6 +112,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.BackgroundServices
                                     if (columnValue == priceRebateSetting.StockCodeHeaderName)
                                     {
                                         stockCodeColIndex = col;
+                                    }
+                                    if (columnValue == priceRebateSetting.SKUHeaderName)
+                                    {
+                                        skuColIndex = col;
                                     }
                                     if (columnValue == priceRebateSetting.DescriptionHeaderName)
                                     {
@@ -162,6 +167,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.BackgroundServices
                                         PriceRebateID = priceRebate.ID,
                                         DocumentNo = dataTable.Rows[row][documentNoColIndex].ToString(),
                                         StockCode = dataTable.Rows[row][stockCodeColIndex].ToString(),
+                                        SKU = dataTable.Rows[row][skuColIndex].ToString(),
                                         Description = dataTable.Rows[row][descriptionColIndex].ToString(),
                                         Quantity = quantity,
                                         UnitPrice = unitPrice,

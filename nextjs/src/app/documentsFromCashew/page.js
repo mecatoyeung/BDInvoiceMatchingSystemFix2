@@ -491,14 +491,12 @@ function DocumentsFromCashew() {
   useEffect(() => {
     (async () => {
       await getDocumentFromCashewItemsPagination(filterModel);
-      console.log("useEffect1");
     })();
   }, [router.isReady]);
 
   useEffect(() => {
     (async () => {
       await loadDefaultColumnDefs();
-      console.log("useEffect2");
     })();
   }, []);
 

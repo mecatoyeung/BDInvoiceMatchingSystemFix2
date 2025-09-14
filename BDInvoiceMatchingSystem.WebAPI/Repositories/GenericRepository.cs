@@ -7,6 +7,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
+        ApplicationDbContext Database { get; }
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetByIdAsync(long id);
         Task<IEnumerable<T>> GetByConditions(Expression<Func<T, bool>> whereConditions);
@@ -30,6 +31,12 @@ namespace BDInvoiceMatchingSystem.WebAPI.Repositories
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public ApplicationDbContext Database { get
+            {
+                return _context;
+            }
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

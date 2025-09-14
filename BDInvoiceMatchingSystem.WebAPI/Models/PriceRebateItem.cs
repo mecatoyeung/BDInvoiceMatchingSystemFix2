@@ -24,6 +24,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
         [Column(TypeName = "VARCHAR(255)")]
         public string? StockCode { get; set; }
 
+        [Column(TypeName = "VARCHAR(255)")]
+        public string? SKU { get; set; }
+
         [Required]
         [Column(TypeName = "NVARCHAR(255)")]
         public string? Description { get; set; }

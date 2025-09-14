@@ -69,16 +69,17 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
         }
 
         [HttpPost("Match")]
-        public async Task<ActionResult<DocumentFromCashew>> Match([FromBody] MatchWithDocumentFromCashewForm form)
+        public async Task<ActionResult> Match([FromBody] MatchWithDocumentFromCashewForm form)
         {
             if (form.PriceRebateItems == null || form.PriceRebateItems.Count() == 0)
             {
                 return BadRequest(new { Message = "Please provide price rebate items" });
             }
-            if (form.DocumentFromCashewItems == null || form.DocumentFromCashewItems.Count() == 0)
+            
+            /*if (form.DocumentFromCashewItems == null || form.DocumentFromCashewItems.Count() == 0)
             {
                 return BadRequest(new { Message = "Please provide documents from cashew" });
-            }
+            }*/
 
             var priceRebateItems = (await _unitOfWork.PriceRebateItems.GetByConditions(m => form.PriceRebateItems.ToList().Contains(m.ID))).ToList();
             if (priceRebateItems.Count() == 0)
@@ -90,6 +91,35 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
             if (priceRebateItems.Count() == 0)
             {
                 return BadRequest(new { Message = "No document from cashew items matched" });
+            }
+
+            if (documentFromCashewItems.Count() == 0)
+            {
+                foreach (var priceRebateItem in priceRebateItems)
+                {
+                    priceRebateItem.Matched = true;
+                    _unitOfWork.PriceRebateItems.Update(priceRebateItem);
+                }
+                await _unitOfWork.CompleteAsync();
+
+                var mPriceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(priceRebateItems[0].PriceRebateID);
+                var mAllMatched = true;
+                if (await _unitOfWork.PriceRebateItems.Any(i => i.PriceRebateID == mPriceRebate.ID && !i.AutoMatchCompleted))
+                {
+                    mAllMatched = false;
+                }
+
+                mPriceRebate.AllItemsAreMatched = mAllMatched;
+                if (mAllMatched)
+                {
+                    mPriceRebate.Status = PriceRebateStatus.COMPLETED;
+                }
+                _unitOfWork.PriceRebates.Update(mPriceRebate);
+
+                return Ok(new
+                {
+                    Message = "Matched!"
+                });
             }
 
             var priceRebateItemsDocumentNosAreTheSame = priceRebateItems.All(p => p.DocumentNo == priceRebateItems.First().DocumentNo);
@@ -207,30 +237,51 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                     Any(i => form.PriceRebateItems.
                         Contains(i.ID)));
 
-            foreach (var matching in matchings)
+            if (matchings.Count() > 0)
             {
-                foreach (var priceRebateItem in matching.PriceRebateItems)
+                foreach (var matching in matchings)
+                {
+                    foreach (var priceRebateItem in matching.PriceRebateItems)
+                    {
+                        var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(priceRebateItem.PriceRebateID);
+                        priceRebate.AllItemsAreMatched = false;
+                        _unitOfWork.PriceRebates.Update(priceRebate);
+                        priceRebateItem.Matched = false;
+                        priceRebateItem.MatchingID = null;
+                        _unitOfWork.PriceRebateItems.Update(priceRebateItem);
+                    }
+                    foreach (var documentFromCashewItem in matching.DocumentFromCashewItems)
+                    {
+                        documentFromCashewItem.Matched = false;
+                        documentFromCashewItem.MatchingID = null;
+                        _unitOfWork.DocumentFromCashewItems.Update(documentFromCashewItem);
+                    }
+                    _unitOfWork.Matchings.Delete(matching);
+                }
+                await _unitOfWork.CompleteAsync();
+                return Ok(new
+                {
+                    Message = "Unmatched!"
+                });
+            }
+            else
+            {
+                var priceRebateItems = await _unitOfWork.PriceRebateItems.GetByConditions(pbi => form.PriceRebateItems.Contains(pbi.ID));
+                foreach (var priceRebateItem in priceRebateItems)
                 {
                     var priceRebate = await _unitOfWork.PriceRebates.GetByIdAsync(priceRebateItem.PriceRebateID);
-                    //priceRebate.AllItemsAreMatched = false;
+                    priceRebate.AllItemsAreMatched = false;
                     _unitOfWork.PriceRebates.Update(priceRebate);
                     priceRebateItem.Matched = false;
+                    priceRebateItem.MatchingID = null;
                     _unitOfWork.PriceRebateItems.Update(priceRebateItem);
                 }
-                foreach (var documentFromCashewItem in matching.DocumentFromCashewItems)
+                await _unitOfWork.CompleteAsync();
+                return Ok(new
                 {
-                    documentFromCashewItem.Matched = false;
-                    _unitOfWork.DocumentFromCashewItems.Update(documentFromCashewItem);
-                    documentFromCashewItem.Matched = true;
-                    _unitOfWork.DocumentFromCashewItems.Update(documentFromCashewItem);
-                }
-                _unitOfWork.Matchings.Delete(matching);
+                    Message = "Unmatched!"
+                });
             }
-            await _unitOfWork.CompleteAsync();
-            return Ok(new
-            {
-                Message = "Unmatched!"
-            });
         }
 
         [HttpPost("AutoMatch")]

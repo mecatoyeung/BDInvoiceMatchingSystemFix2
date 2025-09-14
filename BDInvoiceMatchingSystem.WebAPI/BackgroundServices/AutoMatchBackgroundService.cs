@@ -134,6 +134,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.BackgroundServices
             !pbi.Matched &&
             !pbi.AutoMatchCompleted);
 
+        var documentFromCashewItems = (await unitOfWork.DocumentFromCashewItems.GetByConditions(di =>
+            !di.Matched)).ToList();
+
         var groupsOfDocumentNoAndStockCode = priceRebateItems
           .Select(m => new { m.DocumentNo, m.StockCode })
           .Distinct().ToList();
@@ -143,10 +146,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.BackgroundServices
           var filteredPriceRebateItems = priceRebateItems.Where(pri => pri.DocumentNo == groupOfDocumentNoAndStockCode.DocumentNo &&
             pri.StockCode == groupOfDocumentNoAndStockCode.StockCode).ToList();
 
-          var filteredDocumentFromCashewItems = (await unitOfWork.DocumentFromCashewItems.GetByConditions(di =>
+          var filteredDocumentFromCashewItems = documentFromCashewItems.Where(di =>
             di.DocumentFromCashew.DocumentNo == groupOfDocumentNoAndStockCode.DocumentNo &&
             di.StockCode == groupOfDocumentNoAndStockCode.StockCode &&
-              !di.Matched)).ToList();
+              !di.Matched).ToList();
 
           foreach (var filteredPriceRebateItem in filteredPriceRebateItems)
           {

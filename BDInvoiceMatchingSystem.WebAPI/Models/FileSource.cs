@@ -47,6 +47,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.Models
 
         [Required]
         [Column(TypeName = "NVARCHAR(255)")]
+        public string? SKUColName { get; set; }
+
+        [Required]
+        [Column(TypeName = "NVARCHAR(255)")]
         public string? DescriptionColName { get; set; }
 
         [Required]

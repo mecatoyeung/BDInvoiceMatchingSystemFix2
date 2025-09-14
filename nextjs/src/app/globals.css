@@ -49,7 +49,7 @@ h1 {
 }
 
 .ag-body-horizontal-scroll {
-  position: sticky !important;
+  position: absolute !important;
   bottom: 0;
 }
 

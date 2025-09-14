@@ -168,23 +168,46 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                 return NotFound();
             }
 
-            /*var priceRebateItems = await _unitOfWork.PriceRebateItems.GetByConditions(i => i.PriceRebateID == id);
+            var priceRebateItems = await _unitOfWork.PriceRebateItems.GetByConditions(i => i.PriceRebateID == id && i.MatchingID != null);
             var matchingIds = priceRebateItems.Select(i => i.MatchingID);
 
-            var matchings = await _unitOfWork.Matchings.GetByConditions(m => matchingIds.Contains(m.ID));
-            var documentFromCashewItemIds = matchings.SelectMany(m => m.DocumentFromCashewItems.Select(i => i.ID)).ToList();
+
+            /*var documentFromCashewItemIds = matchings.SelectMany(m => m.DocumentFromCashewItems.Select(i => i.ID)).ToList();
             var documentFromCashewItems = await _unitOfWork.DocumentFromCashewItems.GetByConditions(i => documentFromCashewItemIds.Contains(i.ID));
             foreach (var documentFromCashewItem in documentFromCashewItems)
             {
                 documentFromCashewItem.Matched = false;
                 documentFromCashewItem.MatchingID = null;
-                _unitOfWork.DocumentFromCashewItems.Update(documentFromCashewItem);
-            }*/
-            _unitOfWork.PriceRebates.RemoveMatchings(id);
-            //_unitOfWork.Matchings.DeleteByConditions(i => matchingIds.Contains(i.ID));
-            await _unitOfWork.CompleteAsync();
+            }
+            
+            _unitOfWork.DocumentFromCashewItems.Database.UpdateRange(documentFromCashewItems);
+            */
 
-            _unitOfWork.Matchings.DeleteByConditions(i => i.PriceRebateItems.Count == 0 && i.DocumentFromCashewItems.Count == 0);
+            if (matchingIds.Count() > 0)
+            {
+                var matchings = await _unitOfWork.Matchings.GetByConditions(m => matchingIds.Contains(m.ID));
+
+                _unitOfWork.DocumentFromCashewItems.ExecuteRawSql(String.Format(@"
+UPDATE documentfromcashewitems
+SET MatchingID = NULL, Matched = FALSE
+WHERE MatchingID IN ({0});
+            ", String.Join(", ", matchingIds)));
+                _unitOfWork.Matchings.DeleteByConditions(i => matchingIds.Contains(i.ID));
+            }
+
+            _unitOfWork.PriceRebateItems.ExecuteRawSql(String.Format(@"
+DELETE FROM priceRebateItems
+WHERE PriceRebateID = {0};
+            ", id));
+
+            //_unitOfWork.PriceRebateItems.DeleteByConditions(i => i.PriceRebateID == id);
+
+            _unitOfWork.PriceRebates.ExecuteRawSql(String.Format(@"
+DELETE FROM priceRebates
+WHERE ID = {0};
+            ", id));
+            //_unitOfWork.PriceRebates.Delete(priceRebate);
+
             await _unitOfWork.CompleteAsync();
 
             return NoContent();

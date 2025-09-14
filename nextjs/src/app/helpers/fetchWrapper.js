@@ -91,7 +91,7 @@ const fetchWrapper = {
     } catch {
       xAccessToken = ""
     }
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
+    await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -99,13 +99,16 @@ const fetchWrapper = {
         "X-Access-Token": xAccessToken,
       },
       body: JSON.stringify(body),
+    }).then(response => {
+      if (response.status == 401) {
+        navigate("/account/login")
+      }
+      return response
+    }).catch(error => {
+      console.error(error)
     })
 
-    if (response.status == 401) {
-      navigate("/account/login")
-    }
-
-    return response
+    
   },
 }
 export default fetchWrapper

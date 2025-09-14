@@ -37,6 +37,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
 
             settingInDb.DocumentNoHeaderName = setting.DocumentNoHeaderName;
             settingInDb.StockCodeHeaderName = setting.StockCodeHeaderName;
+            settingInDb.SKUHeaderName = setting.SKUHeaderName;
             settingInDb.DescriptionHeaderName = setting.DescriptionHeaderName;
             settingInDb.QuantityHeaderName = setting.QuantityHeaderName;
             settingInDb.UnitPriceHeaderName = setting.UnitPriceHeaderName;
@@ -58,6 +59,7 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                 {
                     DocumentNoHeaderName = "Inv #",
                     StockCodeHeaderName = "Item",
+                    SKUHeaderName = "SKU",
                     DescriptionHeaderName = "Description",
                     QuantityHeaderName = "Sales Qty (BX)",
                     UnitPriceHeaderName = "End-Customer HK$/BX",
