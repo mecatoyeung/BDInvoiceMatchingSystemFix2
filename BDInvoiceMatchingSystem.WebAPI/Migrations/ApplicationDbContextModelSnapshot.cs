@@ -330,6 +330,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(255)");
 
+                    b.Property<string>("SKUColName")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(255)");
+
                     b.Property<string>("StockCodeColName")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(255)");
@@ -438,6 +442,9 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                     b.Property<long?>("MatchingID")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("NoDataButMatched")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<long>("PriceRebateID")
                         .HasColumnType("bigint");
 
@@ -445,7 +452,6 @@ namespace BDInvoiceMatchingSystem.WebAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SKU")
-                        .IsRequired()
                         .HasColumnType("VARCHAR(255)");
 
                     b.Property<string>("StockCode")

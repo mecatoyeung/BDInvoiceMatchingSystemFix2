@@ -1,0 +1,204 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\repos\\BDInvoiceMatchingSystemFix2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\viewmodels\\pricerebateitemlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\viewmodels\\pricerebateitemlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\controllers\\matchingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\controllers\\matchingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\migrations.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\migrations.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\forms\\matchwithdocumentfromcashewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\forms\\matchwithdocumentfromcashewform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\migrations\\20251101091044_addednodatabutmatchedcol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\migrations\\20251101091044_addednodatabutmatchedcol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\models\\pricerebateitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\models\\pricerebateitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\models\\pricerebate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\models\\pricerebate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\bdinvoicematchingsystem.webapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\bdinvoicematchingsystem.webapi.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|c:\\repos\\bdinvoicematchingsystemfix2\\bdinvoicematchingsystem.webapi\\bdinvoicematchingsystem.webapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0EAFF4B9-1A88-48FE-B2A2-B97E5B6D8188}|BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj|solutionrelative:bdinvoicematchingsystem.webapi\\bdinvoicematchingsystem.webapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MatchWithDocumentFromCashewForm.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Forms\\MatchWithDocumentFromCashewForm.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Forms\\MatchWithDocumentFromCashewForm.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Forms\\MatchWithDocumentFromCashewForm.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Forms\\MatchWithDocumentFromCashewForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:11:38.159Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MatchingController.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Controllers\\MatchingController.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Controllers\\MatchingController.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Controllers\\MatchingController.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Controllers\\MatchingController.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAmwGcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:11:22.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20251101091044_AddedNoDataButMatchedCol.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Migrations\\20251101091044_AddedNoDataButMatchedCol.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Migrations\\20251101091044_AddedNoDataButMatchedCol.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Migrations\\20251101091044_AddedNoDataButMatchedCol.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Migrations\\20251101091044_AddedNoDataButMatchedCol.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:10:53.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Migrations.txt",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Migrations.txt",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Migrations.txt",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Migrations.txt",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Migrations.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-11-01T09:10:05.733Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PriceRebateItemListViewModel.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\ViewModels\\PriceRebateItemListViewModel.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\ViewModels\\PriceRebateItemListViewModel.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\ViewModels\\PriceRebateItemListViewModel.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\ViewModels\\PriceRebateItemListViewModel.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowCEAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:08:15.73Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PriceRebateItem.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebateItem.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebateItem.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebateItem.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebateItem.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAwwDQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:05:05.121Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PriceRebate.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebate.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebate.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebate.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Models\\PriceRebate.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA5wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T09:04:59.271Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BDInvoiceMatchingSystem.WebAPI.http",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.http",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.http",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.http",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2025-09-26T07:36:30.493Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BDInvoiceMatchingSystem.WebAPI",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-26T07:31:28.052Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAIwFQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-26T07:23:05.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "BDInvoiceMatchingSystem.WebAPI\\appsettings.json",
+              "ToolTip": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\appsettings.json",
+              "RelativeToolTip": "BDInvoiceMatchingSystem.WebAPI\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-26T07:08:21.563Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

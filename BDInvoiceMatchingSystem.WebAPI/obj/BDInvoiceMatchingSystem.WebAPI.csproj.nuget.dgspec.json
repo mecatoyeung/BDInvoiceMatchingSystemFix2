@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {}
+    "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {
+    "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+        "projectUniqueName": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
         "projectName": "BDInvoiceMatchingSystem.WebAPI",
-        "projectPath": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
-        "packagesPath": "C:\\Users\\catoy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\catoy\\source\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\obj\\",
+        "projectPath": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\BDInvoiceMatchingSystem.WebAPI.csproj",
+        "packagesPath": "C:\\Users\\developer\\.nuget\\packages\\",
+        "outputPath": "C:\\repos\\BDInvoiceMatchingSystemFix2\\BDInvoiceMatchingSystem.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\catoy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\developer\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -150,7 +150,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

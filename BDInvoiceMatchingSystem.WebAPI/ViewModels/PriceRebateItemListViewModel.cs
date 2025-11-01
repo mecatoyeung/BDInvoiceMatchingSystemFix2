@@ -18,6 +18,8 @@ namespace BDInvoiceMatchingSystem.WebAPI.ViewModels
 
         public string? StockCode { get; set; }
 
+        public string? SKU { get; set; }
+
         public string? Description { get; set; }
 
         public string? UnitOfMeasure { get; set; }
@@ -29,5 +31,6 @@ namespace BDInvoiceMatchingSystem.WebAPI.ViewModels
         public decimal SubtotalInHKD { get; set; }
         public bool Matched { get; set; } = false;
         public long? MatchingID { get; set; }
+        public bool NoDataButMatched { get; set; } = false;
     }
 }

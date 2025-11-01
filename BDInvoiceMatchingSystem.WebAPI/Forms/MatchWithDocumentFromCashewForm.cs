@@ -4,5 +4,6 @@
     {
         public long[]? PriceRebateItems { get; set; } = [];
         public long[]? DocumentFromCashewItems { get; set; } = [];
+        public bool? NoDataButMatch { get; set; } = false;
     }
 }

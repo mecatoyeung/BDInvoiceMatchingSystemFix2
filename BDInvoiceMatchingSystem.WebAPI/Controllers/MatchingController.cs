@@ -98,6 +98,10 @@ namespace BDInvoiceMatchingSystem.WebAPI.Controllers
                 foreach (var priceRebateItem in priceRebateItems)
                 {
                     priceRebateItem.Matched = true;
+                    if (form.NoDataButMatch != null && form.NoDataButMatch == true)
+                    {
+                        priceRebateItem.NoDataButMatched = true;
+                    }
                     _unitOfWork.PriceRebateItems.Update(priceRebateItem);
                 }
                 await _unitOfWork.CompleteAsync();

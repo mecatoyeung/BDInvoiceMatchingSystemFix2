@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e28ffdb2a839d8b36d46cffa02d5dc17c1f84307")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+728bf6681b03f0724206f29113085d341a307582")]
 [assembly: System.Reflection.AssemblyProductAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

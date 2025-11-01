@@ -1,5 +1,7 @@
-﻿dotnet ef migrations add AddedSKUColInPriceRebateItemFix --project BDInvoiceMatchingSystem.WebAPI
+﻿dotnet ef migrations add AddedNoDataButMatchedCol --project BDInvoiceMatchingSystem.WebAPI
 
 dotnet ef database update --project BDInvoiceMatchingSystem.WebAPI
 
 dotnet ef migrations remove --project BDInvoiceMatchingSystem.WebAPI
+
+dotnet publish . -c Release -o .\publish
