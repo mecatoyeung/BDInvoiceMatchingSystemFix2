@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+728bf6681b03f0724206f29113085d341a307582")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b7866ff3b17378aaf36016cbee75147284ef6f1")]
 [assembly: System.Reflection.AssemblyProductAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BDInvoiceMatchingSystem.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
